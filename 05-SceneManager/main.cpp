@@ -40,17 +40,22 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 #include "Platform.h"
 
 #include "SampleKeyEventHandler.h"
-
+#include "Map.h"
 #include "AssetIDs.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"04 - Collision"
 #define WINDOW_ICON_PATH L"mario.ico"
+#define TEXTURE_PATH_MAP TEXTURES_DIR "\\map.png"
+#define DATA_PATH_MAP TEXTURES_DIR "\\map.txt"
 
 #define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
 
-#define SCREEN_WIDTH 320
+#define SCREEN_WIDTH 720
 #define SCREEN_HEIGHT 240
+
+
+Map* map;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

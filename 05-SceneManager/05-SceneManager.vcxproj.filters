@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="map">
+      <UniqueIdentifier>{d5b62c21-d464-4504-abe9-60661ed200b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="camera">
+      <UniqueIdentifier>{60a777b8-ae71-48f7-bbe7-bd0836ff4116}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -74,6 +80,12 @@
     </ClCompile>
     <ClCompile Include="Portal.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>map</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +157,12 @@
     </ClInclude>
     <ClInclude Include="Portal.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>map</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
