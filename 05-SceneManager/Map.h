@@ -1,32 +1,34 @@
 #pragma once
-#include"Textures.h"
-#include "Game.h"
-#include "Sprites.h"
-#include "Utils.h"
-#include <fstream>
-#include <iostream>
 
-#define FrameHeight 16
-#define FrameWidth	16
-#define MAX	300
+#include <iostream>
+#include <fstream>
+#include "Utils.h"
+#include "Sprites.h"
+#include "Textures.h"
+#include "Game.h"
+
 
 class Map
 {
-	LPCWSTR FilepathMap;
-	int id;
-	int collumns;
-	int rows;
-	int TileSetWidth;
-	int TileSetHeight;
-	int Frameheight;
-	int Framewidth;
-	int TileMapID[MAX][MAX];
+	CSprites* sprites = CSprites::GetInstance();
+	LPCWSTR MapFilePath;
+	LPCWSTR MapPNG;
+	int Num_Rows, Num_Cols;
+	int num_row_read, num_col_read;
+	int Tile_Width, Tile_Height;
+	int Id;
+
+	int tilemap[300][300];
 
 public:
-	Map(int ID, LPCWSTR Filepath, int Rows, int Cols, int Tiles, int TileColumn);
-	void ReadMap();
-	void DrawMap();
-	void Load();
-	int GetMapWidth() { return collumns * TileSetWidth; }
+	bool IsWorldMap;
+	Map(int ID, LPCWSTR FilePath_data, int Num_Rows, int  Num_Cols, int Num_row_read, int Num_col_read, int map_width = 16, int map_height = 16);
 	~Map();
+	void Load();
+	void LoadMap();
+	void Draw();
+	int GetMapWidth() { return Num_Cols * Tile_Width; }
+	int GetMapHeight() { return Num_Rows * Tile_Height + 62; }
 };
+
+

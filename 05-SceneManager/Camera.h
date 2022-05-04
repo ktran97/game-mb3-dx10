@@ -1,9 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include "Utils.h"
-#define SCREEN_WIDTH 720
+#define SCREEN_WIDTH 252
 #define SCREEN_HEIGHT 272
-
 class Camera
 {
 public:
@@ -29,7 +28,7 @@ public:
 		else {
 			if (cam_y <= 0)
 				cam_y = 0;
-			cam_vy = Mariovy * 0.7;
+			cam_vy = Mariovy * 0.5;
 		}
 		if (cam_vy > 0)
 		{

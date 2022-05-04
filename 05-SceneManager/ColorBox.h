@@ -1,14 +1,24 @@
 #pragma once
 #include "GameObject.h"
-class ColorBox : public CGameObject
+class ColorBox :
+	public CGameObject
 {
-	int width;
-	int height;
+	int Width;
+	int Height;
 public:
-	ColorBox(float l, float t, float r, float b);
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual int GetWidth() { return width; };
+	ColorBox(int W, int H)
+	{
+		Width = W;
+		Height = H;
+		objType = 6;
+	}
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom)
+	{
+		left = x - Width / 2;
+		top = y - Height / 2;
+		right = left + Width;
+		bottom = top + Height;
+	}
+	virtual int GetWidth() { return Width; };
 	virtual void Render();
-	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { return 1; }
 };

@@ -9,12 +9,14 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
-#include "ColorBox.h"
 #include "Camera.h"
+#include "Map.h"
+#include "ColorBox.h"
 
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
+
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
@@ -27,14 +29,15 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
-#define SCENE_SECTION_MAPS 3
+
+#define SCENE_SECTION_MAP	3
 
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
 #define ASSETS_SECTION_ANIMATIONS 2
 
 #define MAX_SCENE_LINE 1024
-
+Map* map;
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
@@ -90,19 +93,26 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	CAnimations::GetInstance()->Add(ani_id, ani);
 }
 
+
+// Parse section map
 void CPlayScene::_ParseSection_MAP(string line) {
 	vector<string> tokens = split(line);
-	if (tokens.size() < 6) return;
-	int ID = atoi(tokens[0].c_str());
+	if (tokens.size() < 9) return;
+	int IDtex = atoi(tokens[0].c_str());
 	wstring mapPath = ToWSTR(tokens[1]);
-	int Row = atoi(tokens[2].c_str());
-	int Column = atoi(tokens[3].c_str());
-	int tileSet = atoi(tokens[4].c_str());
+	int mapRow = atoi(tokens[2].c_str());
+	int mapColumn = atoi(tokens[3].c_str());
+	int tileRow = atoi(tokens[4].c_str());
 	int tileColumn = atoi(tokens[5].c_str());
-	int checkWM = atoi(tokens[6].c_str());
+	int tileWidth = atoi(tokens[6].c_str());
+	int tileHeight = atoi(tokens[7].c_str());
+	int checkWM = atoi(tokens[8].c_str());
 
-	map = new Map(ID, mapPath.c_str(), Row, Column, tileSet, tileColumn);
+	map = new Map(IDtex, mapPath.c_str(), mapRow, mapColumn, tileRow, tileColumn, tileWidth, tileHeight);
+	if (checkWM != 0) map->IsWorldMap = true;
+	else map->IsWorldMap = false;
 }
+
 
 /*
 	Parse a line in section [OBJECTS]
@@ -136,6 +146,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -154,12 +165,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
-	case OBJECT_TYPE_COLORBOX: {
-		float r = (float)atof(tokens[3].c_str());
-		float b = (float)atof(tokens[4].c_str());
-		obj = new ColorBox(x, y, r, b);
+	case OBJECT_TYPE_COLORBOX:
+	{
+		int width, height;
+		width = atoi(tokens[3].c_str());
+		height = atoi(tokens[4].c_str());
+		obj = new ColorBox(width, height);
+		break;
 	}
-							 break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -235,7 +248,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
-		if (line == "[MAP]") { section = SCENE_SECTION_MAPS; continue; };
+		if (line == "[MAP]") { section = SCENE_SECTION_MAP; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
@@ -245,7 +258,7 @@ void CPlayScene::Load()
 		{
 		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
-		case SCENE_SECTION_MAPS: _ParseSection_MAP(line); break;
+		case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
 		}
 	}
 
@@ -283,15 +296,14 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	Camera::GetInstance()->SetCamPos(cx, 240);
-	/*CGame::GetInstance()->SetCamPos(cx, 0.0f);*/
+	Camera::GetInstance()->SetCamPos(cx, 240.0f /*cy*/);
 
 	PurgeDeletedObjects();
 }
 
 void CPlayScene::Render()
 {
-	map->DrawMap();
+	map->Draw();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
