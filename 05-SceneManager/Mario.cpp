@@ -7,8 +7,9 @@
 #include "Goomba.h"
 #include "Coin.h"
 #include "Portal.h"
-
+#include "ColorBox.h"
 #include "Collision.h"
+#include "Platform.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -37,24 +38,29 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (e->ny != 0 && e->obj->IsBlocking())
-	{
-		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
-	}
-	else 
 	if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = 0;
 	}
-
-	if (dynamic_cast<CGoomba*>(e->obj))
-		OnCollisionWithGoomba(e);
-	else if (dynamic_cast<CCoin*>(e->obj))
-		OnCollisionWithCoin(e);
-	else if (dynamic_cast<CPortal*>(e->obj))
-		OnCollisionWithPortal(e);
+	else
+		if (dynamic_cast<CPlatform*>(e->obj))
+			OnCollisionWithPlatform(e);
+		else if (dynamic_cast<CGoomba*>(e->obj))
+			OnCollisionWithGoomba(e);
+		else if (dynamic_cast<CCoin*>(e->obj))
+			OnCollisionWithCoin(e);
+		else if (dynamic_cast<CPortal*>(e->obj))
+			OnCollisionWithPortal(e);
+		else if (dynamic_cast<ColorBox*>(e->obj))
+			OnCollisionWithColorBox(e);
 }
+
+void CMario::OnCollisionWithPlatform(LPCOLLISIONEVENT e) {
+	if (e->ny < 0 && e->obj->IsBlocking()) {
+		isOnPlatform = true;
+	}
+}
+
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -100,6 +106,18 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+}
+
+void CMario::OnCollisionWithColorBox(LPCOLLISIONEVENT e)
+{
+	ColorBox* cl = dynamic_cast<ColorBox*>(e->obj);
+	if (e->ny < 0) {
+
+		this->isOnPlatform = true;
+	}
+	if (e->nx != 0) {
+
+	}
 }
 
 //

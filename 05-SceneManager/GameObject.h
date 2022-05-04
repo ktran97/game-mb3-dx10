@@ -28,9 +28,12 @@ protected:
 
 	int state;
 
-	bool isDeleted; 
+	bool isDeleted;
+	int width;
 
-public: 
+public:
+	int type;
+	int num;
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
@@ -39,6 +42,7 @@ public:
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
+	int getType() { return type; }
 
 	void RenderBoundingBox();
 

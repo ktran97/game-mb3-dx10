@@ -24,6 +24,8 @@ public:
 		this->spriteIdBegin = sprite_id_begin;
 		this->spriteIdMiddle = sprite_id_middle;
 		this->spriteIdEnd = sprite_id_end;
+		type = 5;
+		width = cellWidth * length;
 	}
 
 	void Render();

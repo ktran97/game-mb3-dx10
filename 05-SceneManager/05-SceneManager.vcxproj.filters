@@ -19,6 +19,9 @@
     <Filter Include="camera">
       <UniqueIdentifier>{60a777b8-ae71-48f7-bbe7-bd0836ff4116}</UniqueIdentifier>
     </Filter>
+    <Filter Include="colorbox">
+      <UniqueIdentifier>{23f71ba7-7b53-4bea-8857-0d581cda2af1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -86,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorBox.cpp">
+      <Filter>colorbox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBox.h">
+      <Filter>colorbox</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
