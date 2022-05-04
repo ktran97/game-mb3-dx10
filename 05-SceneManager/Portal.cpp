@@ -2,10 +2,10 @@
 #include "Game.h"
 #include "Textures.h"
 
-CPortal::CPortal(float l, float t, float r, float b, int scene_id )
+CPortal::CPortal(float l, float t, float r, float b, int scene_id)
 {
 	this->scene_id = scene_id;
-	x = l; 
+	x = l;
 	y = t;
 	width = r - l;
 	height = b - t;
@@ -27,7 +27,7 @@ void CPortal::RenderBoundingBox()
 	rect.bottom = (int)b - (int)t;
 
 	float cx, cy;
-	CGame::GetInstance()->GetCamPos(cx, cy);
+	Camera::GetInstance()->GetCamPos(cx, cy);
 
 	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
@@ -37,10 +37,10 @@ void CPortal::Render()
 	RenderBoundingBox();
 }
 
-void CPortal::GetBoundingBox(float &l, float &t, float &r, float &b)
+void CPortal::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - width/2;
-	t = y - height/2;
-	r = x + width/2;
-	b = y + height/2;
+	l = x - width / 2;
+	t = y - height / 2;
+	r = x + width / 2;
+	b = y + height / 2;
 }
