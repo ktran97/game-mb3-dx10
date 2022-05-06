@@ -287,53 +287,44 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 			}
 			else // collision on X first
 			{
-				if (colX->obj->objType == 6)
-					x += dx;
+				x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
+				objSrc->SetPosition(x, y);
+
+				objSrc->OnCollisionWith(colX);
+
+				//
+				// see if after correction on X, is there still a collision on Y ? 
+				//
+				LPCOLLISIONEVENT colY_other = NULL;
+
+				//
+				// check again if there is true collision on Y
+				//
+				colY->isDeleted = true;		// remove current collision event on Y
+
+				// replace with a new collision event using corrected location 
+				coEvents.push_back(SweptAABB(objSrc, dt, colY->obj));
+
+				// re-filter on Y only
+				Filter(objSrc, coEvents, colX, colY_other, /*filterBlock = */ 1, /*filterX=*/0, /*filterY=*/1);
+
+				if (colY_other != NULL)
+				{
+					y += colY_other->t * dy + colY_other->ny * BLOCK_PUSH_FACTOR;
+					objSrc->OnCollisionWith(colY_other);
+				}
 				else
 				{
-					x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
-					objSrc->SetPosition(x, y);
-
-					objSrc->OnCollisionWith(colX);
-
-					//
-					// see if after correction on X, is there still a collision on Y ? 
-					//
-					LPCOLLISIONEVENT colY_other = NULL;
-
-					//
-					// check again if there is true collision on Y
-					//
-					colY->isDeleted = true;		// remove current collision event on Y
-
-					// replace with a new collision event using corrected location 
-					coEvents.push_back(SweptAABB(objSrc, dt, colY->obj));
-
-					// re-filter on Y only
-					Filter(objSrc, coEvents, colX, colY_other, /*filterBlock = */ 1, /*filterX=*/0, /*filterY=*/1);
-
-					if (colY_other != NULL)
-					{
-						y += colY_other->t * dy + colY_other->ny * BLOCK_PUSH_FACTOR;
-						objSrc->OnCollisionWith(colY_other);
-					}
-					else
-					{
-						y += dy;
-					}
+					y += dy;
 				}
 			}
 		}
 		else
 			if (colX != NULL)
 			{
-				if (colX->obj->objType == 6)
-					x += dx;
-				else {
-					x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
-					y += dy;
-					objSrc->OnCollisionWith(colX);
-				}
+				x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
+				y += dy;
+				objSrc->OnCollisionWith(colX);
 			}
 			else
 				if (colY != NULL)
