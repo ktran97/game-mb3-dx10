@@ -18,19 +18,19 @@ class CGameObject
 {
 protected:
 
-	float x;
 	float y;
 
 	float vx;
 	float vy;
-
-	int nx;
 
 	int state;
 
 	bool isDeleted;
 
 public:
+	int nx;
+	float x;
+	bool isitem;
 	int objType;
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
@@ -61,10 +61,13 @@ public:
 	virtual void OnNoCollision(DWORD dt) {};
 
 	// When collision with an object has been detected (triggered by CCollision::Process)
-	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {};
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt) {};
 
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return 1; }
+	virtual int IsBlockingX() { return 1; }
+	virtual int IsBlockingY() { return 1; }
+	virtual void DirectBlocking(int& l, int& t, int& r, int& b) { l = 1; t = 1; b = 1; r = 1; }
 
 	~CGameObject();
 

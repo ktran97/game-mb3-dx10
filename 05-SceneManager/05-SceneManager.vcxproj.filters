@@ -25,6 +25,12 @@
     <Filter Include="enemies">
       <UniqueIdentifier>{c022639b-d6e7-4fa1-a6aa-9e40355e55ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="bricks">
+      <UniqueIdentifier>{37e6af7a-5c83-411f-a635-fcf66bf75bd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mushroom">
+      <UniqueIdentifier>{94d8b1f5-8f45-4a04-96db-7ee27fb435e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -37,9 +43,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Animations.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Brick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Coin.cpp">
@@ -96,8 +99,20 @@
     <ClCompile Include="Goomba.cpp">
       <Filter>enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Koopa.cpp">
+    <ClCompile Include="NavigationBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Koopas.cpp">
       <Filter>enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionBrick.cpp">
+      <Filter>bricks</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>bricks</Filter>
+    </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,9 +126,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AssetIDs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Brick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Coin.h">
@@ -179,8 +191,20 @@
     <ClInclude Include="Goomba.h">
       <Filter>enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Koopa.h">
+    <ClInclude Include="NavigationBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Koopas.h">
       <Filter>enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionBrick.h">
+      <Filter>bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
