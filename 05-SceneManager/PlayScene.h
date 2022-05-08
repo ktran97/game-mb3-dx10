@@ -37,7 +37,7 @@ public:
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 
-	void AddItemToQBrick(LPGAMEOBJECT obj) {
+	void AddItemToQBrick(LPGAMEOBJECT obj, int index) {
 		QuestionBrick* QBrick = dynamic_cast<QuestionBrick*>(obj);
 		CMario* mario = dynamic_cast<CMario*>(player);
 		float BrickX, BrickY;
@@ -47,11 +47,11 @@ public:
 		{
 			Mushroom* mushroom = new Mushroom(BrickX, BrickY);
 			mushroom->SetState(MUSHROOOM_STATE_BEING_INNITED);
-			objects.push_back(mushroom);
+			objects[index] = mushroom;
+			objects.push_back(QBrick);
 			QBrick->innitItemSuccess = true;
 		}
 	}
-
 	void Clear();
 	void PurgeDeletedObjects();
 
@@ -59,4 +59,3 @@ public:
 };
 
 typedef CPlayScene* LPPLAYSCENE;
-

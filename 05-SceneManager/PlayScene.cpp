@@ -294,8 +294,8 @@ void CPlayScene::Update(DWORD dt)
 		if (dynamic_cast<QuestionBrick*>(objects[i]))
 		{
 			QuestionBrick* Qbrick = dynamic_cast<QuestionBrick*>(objects[i]);
-			if (!Qbrick->innitItemSuccess && Qbrick->Item > 1)
-				AddItemToQBrick(Qbrick);
+			if (!Qbrick->innitItemSuccess)
+				AddItemToQBrick(Qbrick, i);
 		}
 
 		coObjects.push_back(objects[i]);

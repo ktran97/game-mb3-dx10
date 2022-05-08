@@ -14,7 +14,10 @@ class CCoin : public CGameObject {
 public:
 	CCoin(float x, float y) : CGameObject(x, y) {}
 	void Render();
-	void Update(DWORD dt) {}
+	void Update(DWORD dt) {
+		x += vx * dt;
+		y += vy * dt;
+	}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return 0; }
 };

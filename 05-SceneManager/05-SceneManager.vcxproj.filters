@@ -31,6 +31,15 @@
     <Filter Include="mushroom">
       <UniqueIdentifier>{94d8b1f5-8f45-4a04-96db-7ee27fb435e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mario">
+      <UniqueIdentifier>{c15ad916-859a-4ff4-97a9-24aa0aeef3bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="items">
+      <UniqueIdentifier>{05b63ab5-fdcb-4151-96ae-7fd34181c121}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{7ea48bad-7ede-41e8-b1fe-b3839a5e2003}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -45,9 +54,6 @@
     <ClCompile Include="Animations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Coin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -58,9 +64,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Platform.cpp">
@@ -111,8 +114,14 @@
     <ClCompile Include="Brick.cpp">
       <Filter>bricks</Filter>
     </ClCompile>
+    <ClCompile Include="Mario.cpp">
+      <Filter>mario</Filter>
+    </ClCompile>
     <ClCompile Include="Mushroom.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>items</Filter>
+    </ClCompile>
+    <ClCompile Include="Coin.cpp">
+      <Filter>items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,9 +137,6 @@
     <ClInclude Include="AssetIDs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Coin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -144,9 +150,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeyEventHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mario.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Platform.h">
@@ -203,8 +206,14 @@
     <ClInclude Include="Brick.h">
       <Filter>bricks</Filter>
     </ClInclude>
+    <ClInclude Include="Mario.h">
+      <Filter>mario</Filter>
+    </ClInclude>
     <ClInclude Include="Mushroom.h">
-      <Filter>Header Files</Filter>
+      <Filter>items</Filter>
+    </ClInclude>
+    <ClInclude Include="Coin.h">
+      <Filter>items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

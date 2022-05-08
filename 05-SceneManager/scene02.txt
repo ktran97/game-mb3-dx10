@@ -5,6 +5,7 @@ coin.txt
 cloud.txt
 goomba.txt
 koopas.txt
+question-brick.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -46,8 +47,13 @@ koopas.txt
 6	2200	344	48	144
 
 #QUESTIONBRICK
-7	200	408	2
-7	300	408	2
+7	184	360	1
+7	200	360	1
+7	232	312	1
+7	248	312	2
+7	424	328	1
+7	664	392	2
+7	1480	368	2
 
 [MAP]
 9000	map/map.txt	43	174	11	11	16	16	0
