@@ -23,7 +23,7 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 		right = left + GOOMBA_BBOX_WIDTH;
 		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
 	}
-	else
+	else if (state != GOOMBA_STATE_DIEBYSHELL)
 	{
 		left = x - GOOMBA_BBOX_WIDTH / 2;
 		top = y - GOOMBA_BBOX_HEIGHT / 2;
@@ -38,16 +38,16 @@ void CGoomba::OnNoCollision(DWORD dt)
 	y += vy * dt;
 };
 
-void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
+void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) return;
 
-	if (e->ny != 0)
+	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
 	}
-	else if (e->nx != 0)
+	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = -vx;
 	}
@@ -68,7 +68,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 	if (level == PARA_GOOMBA)CalcGoombaMove();
-	//CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -82,6 +81,8 @@ void CGoomba::Render()
 		{
 			aniId = ID_ANI_GOOMBA_DIE;
 		}
+		else if (state == GOOMBA_STATE_DIEBYSHELL)
+			aniId = ID_ANI_GOOMBA_DIEBYSHELL;
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
 	//RenderBoundingBox();
@@ -98,6 +99,11 @@ void CGoomba::SetState(int state)
 		vx = 0;
 		vy = 0;
 		ay = 0;
+		break;
+	case GOOMBA_STATE_DIEBYSHELL:
+		die_start = GetTickCount64();
+		vx = nx * GOOMBA_DIEBYSHELL_VX;
+		vy = -GOOMBA_DIEBYSHELL_VY;
 		break;
 	case GOOMBA_STATE_WALKING:
 		vx = GOOMBA_WALKING_SPEED;

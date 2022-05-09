@@ -1,10 +1,12 @@
 #pragma once
 #include "GameObject.h"
 
-#define GOOMBA_GRAVITY 0.002f
+#define GOOMBA_GRAVITY 0.0007f
 #define GOOMBA_WALKING_SPEED 0.05f
 #define GOOMBA_JUMPING_SPEED 0.1f
 #define GOOMBA_FLYING_SPEED 0.25f
+#define GOOMBA_DIEBYSHELL_VX	0.03f
+#define GOOMBA_DIEBYSHELL_VY	0.3f
 
 #define GOOMBA_PHASE_WALKING	1
 #define GOOMBA_PHASE_JUMPING	2
@@ -21,15 +23,18 @@
 
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
+#define GOOMBA_STATE_DIEBYSHELL	300
 
 #define ID_ANI_GOOMBA_WALKING 20000
 #define ID_ANI_GOOMBA_DIE 21000
+#define ID_ANI_GOOMBA_DIEBYSHELL 21002
 
 #define ID_ANI_PARAGOOMBA_WALKING 20001
 #define ID_ANI_PARAGOOMBA_JUMPING 20002
 #define ID_ANI_PARAGOOMBA_FLYING 20003
 #define ID_ANI_PARAGOOMBA_NOWING_WALKING 20004
-#define ID_ANI_PARAGOOMBA_DEAD	21001
+#define ID_ANI_PARAGOOMBA_DIE	21001
+#define ID_ANI_PARAGOOMBA_DIEBYSHELL	21003
 
 
 
@@ -52,7 +57,7 @@ protected:
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 
-	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt);
 
 	void CalcGoombaMove() {
 		switch (goombaPhase) {
@@ -90,16 +95,17 @@ protected:
 		}
 		}
 	}
-	
+
 	void GetParaGoombaAni(int& idAni) {
-		if (level == PARA_GOOMBA)
+		if (state == GOOMBA_STATE_DIEBYSHELL)idAni = ID_ANI_PARAGOOMBA_DIEBYSHELL;
+		else if (level == PARA_GOOMBA)
 		{
 			if (goombaPhase == GOOMBA_PHASE_WALKING)idAni = ID_ANI_PARAGOOMBA_WALKING;
 			else if (goombaPhase == GOOMBA_PHASE_JUMPING)idAni = ID_ANI_PARAGOOMBA_JUMPING;
 			else if (goombaPhase == GOOMBA_PHASE_FLYING)idAni = ID_ANI_PARAGOOMBA_FLYING;
 		}
 		else if (state == GOOMBA_STATE_WALKING)idAni = ID_ANI_PARAGOOMBA_NOWING_WALKING;
-		else idAni = ID_ANI_PARAGOOMBA_DEAD;
+		else idAni = ID_ANI_PARAGOOMBA_DIE;
 	};
 public:
 	int level, goombaPhase;

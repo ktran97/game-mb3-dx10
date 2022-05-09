@@ -52,7 +52,7 @@ public:
         {
             vy = 0;
         }
-        else if (e->nx != 0)
+        else if (e->nx != 0 && e->obj->IsBlocking())
         {
             vx = -vx;
         }
