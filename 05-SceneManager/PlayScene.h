@@ -45,10 +45,17 @@ public:
 
 		if (QBrick->readyInnitItem)
 		{
-			Mushroom* mushroom = new Mushroom(BrickX, BrickY);
-			mushroom->SetState(MUSHROOOM_STATE_BEING_INNITED);
-			objects[index] = mushroom;
-			objects.push_back(QBrick);
+			if (QBrick->Item > 1)
+			{
+				Mushroom* mushroom = new Mushroom(BrickX, BrickY);
+				mushroom->SetState(MUSHROOOM_STATE_BEING_INNITED);
+				objects.push_back(mushroom);
+				QBrick->innitItemSuccess = true;
+				objects[index] = mushroom;
+				objects.push_back(QBrick);
+			}
+			else QBrick->InitCoin = true;
+
 			QBrick->innitItemSuccess = true;
 		}
 	}

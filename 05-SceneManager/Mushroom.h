@@ -11,6 +11,9 @@
 
 #define MUSHROOOM_STATE_BEING_INNITED   1
 #define MUSHROOOM_STATE_INNITED   2
+
+#define ID_ANI_MUSHROOM 80000
+
 class Mushroom :
     public CGameObject
 {
@@ -55,7 +58,9 @@ public:
         }
     }
     void Render() {
-        RenderBoundingBox();
+        CAnimations* animations = CAnimations::GetInstance();
+        animations->Get(ID_ANI_MUSHROOM)->Render(x, y);
+        //RenderBoundingBox();
     }
     void GetBoundingBox(float& left, float& top, float& right, float& bottom) {
         left = x - MUSHROOM_WIDTH / 2;

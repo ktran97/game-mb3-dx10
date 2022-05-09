@@ -6,6 +6,7 @@ cloud.txt
 goomba.txt
 koopas.txt
 question-brick.txt
+items.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
