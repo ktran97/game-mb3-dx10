@@ -117,6 +117,9 @@
     <ClCompile Include="Coin.cpp">
       <Filter>items</Filter>
     </ClCompile>
+    <ClCompile Include="Pipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="Coin.h">
       <Filter>items</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipe.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

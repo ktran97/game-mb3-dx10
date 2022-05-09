@@ -13,6 +13,7 @@
 #include "Map.h"
 #include "ColorBox.h"
 #include "Koopas.h"
+#include "Pipe.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -161,7 +162,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-
+	case OBJECT_TYPE_PIPE: {
+		int width = atoi(tokens[3].c_str());
+		int height = atoi(tokens[4].c_str());
+		obj = new Pipe(x, y, width, height);
+		break;
+	}
 	case OBJECT_TYPE_PLATFORM:
 	{
 
