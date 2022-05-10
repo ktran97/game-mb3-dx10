@@ -120,6 +120,12 @@
     <ClCompile Include="Pipe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FirePiranhaPlant.cpp">
+      <Filter>enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBullet.cpp">
+      <Filter>enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -214,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="Pipe.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FirePiranhaPlant.h">
+      <Filter>enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBullet.h">
+      <Filter>enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

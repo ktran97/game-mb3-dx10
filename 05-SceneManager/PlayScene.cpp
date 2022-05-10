@@ -161,6 +161,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new QuestionBrick(x, y, item);
 		break;
 	}
+	case OBJECT_TYPE_FIREPIRANHAPLANT: {obj = new FirePiranhaPlant(x, y); break; }
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_PIPE: {
 		int width = atoi(tokens[3].c_str());

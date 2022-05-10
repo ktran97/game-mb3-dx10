@@ -1,8 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include "Utils.h"
-#define SCREEN_WIDTH 252
-#define SCREEN_HEIGHT 272
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 240
 class Camera
 {
 public:
@@ -42,10 +42,7 @@ public:
 	}
 	bool IsInCam(float objX, float objY)
 	{
-		if (objX < cam_x || objX - cam_x>SCREEN_WIDTH || objY < cam_y)
-			return false;
-		else
-			return true;
+		return !(objX < cam_x || objX - cam_x>SCREEN_WIDTH || objY < cam_y || objY - cam_y > SCREEN_HEIGHT);
 	}
 	void SetCamPos(float x, float y) {
 		cam_x = x;

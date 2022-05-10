@@ -17,9 +17,6 @@ using namespace std;
 class CGameObject
 {
 protected:
-
-	float y;
-
 	float vx;
 	float vy;
 
@@ -30,6 +27,7 @@ protected:
 public:
 	int nx;
 	float x;
+	float y;
 	bool isitem;
 	int objType;
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
