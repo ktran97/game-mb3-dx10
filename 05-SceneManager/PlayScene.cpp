@@ -295,6 +295,7 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
+	vector<LPGAMEOBJECT> Mario;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
 
@@ -307,10 +308,22 @@ void CPlayScene::Update(DWORD dt)
 
 		coObjects.push_back(objects[i]);
 	}
+	Mario.push_back(objects[0]);
+
+	for (size_t i = 0; i < FirePiranhaPlants.size(); i++) {
+		FirePiranhaPlants[i]->GetEnemyPos(player->x, player->y);
+		FirePiranhaPlants[i]->Update(dt, &Mario);
+	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		if (dynamic_cast<FirePiranhaPlant*>(objects[i]))
+		{
+			FirePiranhaPlant* Fplant = dynamic_cast<FirePiranhaPlant*>(objects[i]);
+			Fplant->GetEnemyPos(player->x, player->y);
+			objects[i]->Update(dt, &Mario);
+		}
+		else objects[i]->Update(dt, &coObjects);
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
