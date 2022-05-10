@@ -325,6 +325,8 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
+	if (cx + game->GetBackBufferWidth() >= 2816)cx = 2816 - game->GetBackBufferWidth();
+	if (player->x <= MARIO_BIG_BBOX_WIDTH / 2)player->x = MARIO_BIG_BBOX_WIDTH / 2;
 	Camera::GetInstance()->SetCamPos(cx, 240.0f /*cy*/);
 
 	PurgeDeletedObjects();
