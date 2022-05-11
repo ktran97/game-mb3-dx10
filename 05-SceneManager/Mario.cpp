@@ -94,7 +94,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<FirePiranhaPlant*>(e->obj))
 		OnCollisionWithPlant(e);
-	else if (e->obj->isitem)
+	else if (dynamic_cast<Mushroom*>(e->obj))
 		OnCollisionWithItem(e);
 }
 

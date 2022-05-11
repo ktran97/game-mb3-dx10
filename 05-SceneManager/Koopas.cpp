@@ -36,11 +36,11 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Koopas::Render()
 {
-	/*int aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
+	int aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
 	if (level == NORMAL_KOOPAS)GetKoopasAni(aniId);
 	else if (level == SMART_KOOPAS)GetRedKoopasAni(aniId);
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);*/
-	RenderBoundingBox();
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	//RenderBoundingBox();
 	//NavBox->Render();
 }
 

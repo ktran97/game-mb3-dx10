@@ -14,6 +14,8 @@
 #include "ColorBox.h"
 #include "Koopas.h"
 #include "Pipe.h"
+#include "FirePiranhaPlant.h"
+//#include "Koopas.h"
 
 #include "SampleKeyEventHandler.h"
 
