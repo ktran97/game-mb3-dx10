@@ -126,6 +126,9 @@
     <ClCompile Include="FireBullet.cpp">
       <Filter>enemies</Filter>
     </ClCompile>
+    <ClCompile Include="MarioTail.cpp">
+      <Filter>mario</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="FireBullet.h">
       <Filter>enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="MarioTail.h">
+      <Filter>mario</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

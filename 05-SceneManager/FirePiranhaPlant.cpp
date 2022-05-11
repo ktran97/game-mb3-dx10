@@ -51,7 +51,7 @@ void FirePiranhaPlant::Render()
 	if (fireBullet->isActivate)
 	{
 		fireBullet->Render();
-		DebugOut(L"helloBullet\n");
+		/*DebugOut(L"helloBullet\n");*/
 	}
 }
 
