@@ -12,6 +12,10 @@
 #include "Camera.h"
 #include "Map.h"
 #include "ColorBox.h"
+#include "Koopas.h"
+#include "Pipe.h"
+#include "FirePiranhaPlant.h"
+//#include "Koopas.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -143,10 +147,30 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
+	case OBJECT_TYPE_GOOMBA: {
+		int goombaLevel = atoi(tokens[3].c_str());
+		obj = new CGoomba(x, y, goombaLevel);
+		break;
+	}
+	case OBJECT_TYPE_KOOPAS: {
+		int koopasLevel = atoi(tokens[3].c_str());
+		obj = new Koopas(x, y, koopasLevel);
+		break;
+	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+	case OBJECT_TYPE_QUESTIONBRICK: {
+		int item = atoi(tokens[3].c_str());
+		obj = new QuestionBrick(x, y, item);
+		break;
+	}
+	case OBJECT_TYPE_FIREPIRANHAPLANT: {obj = new FirePiranhaPlant(x, y); break; }
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-
+	case OBJECT_TYPE_PIPE: {
+		int width = atoi(tokens[3].c_str());
+		int height = atoi(tokens[4].c_str());
+		obj = new Pipe(x, y, width, height);
+		break;
+	}
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -273,14 +297,35 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
+	vector<LPGAMEOBJECT> Mario;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
+
+		if (dynamic_cast<QuestionBrick*>(objects[i]))
+		{
+			QuestionBrick* Qbrick = dynamic_cast<QuestionBrick*>(objects[i]);
+			if (!Qbrick->innitItemSuccess)
+				AddItemToQBrick(Qbrick, i);
+		}
+
 		coObjects.push_back(objects[i]);
+	}
+	Mario.push_back(objects[0]);
+
+	for (size_t i = 0; i < FirePiranhaPlants.size(); i++) {
+		FirePiranhaPlants[i]->GetEnemyPos(player->x, player->y);
+		FirePiranhaPlants[i]->Update(dt, &Mario);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		if (dynamic_cast<FirePiranhaPlant*>(objects[i]))
+		{
+			FirePiranhaPlant* Fplant = dynamic_cast<FirePiranhaPlant*>(objects[i]);
+			Fplant->GetEnemyPos(player->x, player->y);
+			objects[i]->Update(dt, &Mario);
+		}
+		else objects[i]->Update(dt, &coObjects);
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -296,6 +341,8 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
+	if (cx + game->GetBackBufferWidth() >= 2816)cx = 2816 - game->GetBackBufferWidth();
+	if (player->x <= MARIO_BIG_BBOX_WIDTH / 2)player->x = MARIO_BIG_BBOX_WIDTH / 2;
 	Camera::GetInstance()->SetCamPos(cx, 240.0f /*cy*/);
 
 	PurgeDeletedObjects();

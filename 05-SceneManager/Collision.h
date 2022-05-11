@@ -62,6 +62,8 @@ public:
 		float& nx,
 		float& ny);
 
+	bool CheckAABB(LPGAMEOBJECT objSrc, LPGAMEOBJECT objDest);
+
 	LPCOLLISIONEVENT SweptAABB(
 		LPGAMEOBJECT objSrc,
 		DWORD dt,
@@ -82,6 +84,11 @@ public:
 		int filterY);
 
 	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+
+	//bool CheckColEvent(LPCOLLISIONEVENT col) {
+	//	//if (col != NULL) { if (col->obj->objType)return true; else return false; }
+	//	return false;
+	//}
 
 	static CCollision* GetInstance();
 };

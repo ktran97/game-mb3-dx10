@@ -6,7 +6,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
-//#include "Koopas.h"
+#include "FirePiranhaPlant.h"
 
 
 class CPlayScene : public CScene
@@ -16,6 +16,8 @@ protected:
 	LPGAMEOBJECT player;
 
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> Bricks;
+	vector<FirePiranhaPlant*> FirePiranhaPlants;
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -37,6 +39,26 @@ public:
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 
+	void AddItemToQBrick(LPGAMEOBJECT obj, int index) {
+		QuestionBrick* QBrick = dynamic_cast<QuestionBrick*>(obj);
+		CMario* mario = dynamic_cast<CMario*>(player);
+		float BrickX, BrickY;
+		obj->GetPosition(BrickX, BrickY);
+
+		if (QBrick->readyInnitItem)
+		{
+			if (QBrick->Item > 1)
+			{
+				Mushroom* mushroom = new Mushroom(BrickX, BrickY);
+				mushroom->SetState(MUSHROOOM_STATE_BEING_INNITED);
+				objects[index] = mushroom;
+				objects.push_back(QBrick);
+			}
+			else QBrick->InitCoin = true;
+
+			QBrick->innitItemSuccess = true;
+		}
+	}
 	void Clear();
 	void PurgeDeletedObjects();
 
@@ -44,4 +66,3 @@ public:
 };
 
 typedef CPlayScene* LPPLAYSCENE;
-
