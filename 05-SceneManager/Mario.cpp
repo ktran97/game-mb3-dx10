@@ -19,6 +19,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (abs(vx) > abs(maxVx) && state != MARIO_STATE_IDLE) vx = maxVx;
 
+	if (state == MARIO_STATE_IDLE) {
+		if (nx > 0 && vx < 0) { vx = 0; ax = 0; }
+		else if (nx < 0 && vx > 0) { vx = 0; ax = 0; }
+	}
+
 	if (IsSlowFalling)
 	{
 		if (GetTickCount64() - SlowFallingTime >= 150)
@@ -393,7 +398,7 @@ int CMario::GetAniIdRacoon()
 						aniId = ID_ANI_RACOON_WALKING_RIGHT;
 				}
 				else if (ax == -MARIO_ACCEL_SLOWING_DOWN_X)
-					aniId = ID_ANI_MARIO_IDLE_RIGHT;
+					aniId = ID_ANI_RACOON_WALKING_RIGHT;
 			}
 			else // vx < 0
 			{
@@ -409,7 +414,7 @@ int CMario::GetAniIdRacoon()
 						aniId = ID_ANI_RACOON_WALKING_LEFT;
 				}
 				else if (ax == MARIO_ACCEL_SLOWING_DOWN_X)
-					aniId = ID_ANI_MARIO_IDLE_LEFT;
+					aniId = ID_ANI_RACOON_WALKING_LEFT;
 			}
 	if (IsKickKoopas) {
 		if (nx > 0)
@@ -417,7 +422,8 @@ int CMario::GetAniIdRacoon()
 		else
 			aniId = ID_ANI_MARIO_KICKKOOPAS_LEFT;
 	}
-	/*if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;*/
+	if (aniId == -1) aniId = ID_ANI_RACOON_IDLE_RIGHT;
+	/*if (nx < 0 && ax > 0 && vx > 0)*/
 
 	return aniId;
 }
@@ -593,7 +599,7 @@ void CMario::SetState(int state)
 
 		if (vx != 0) {
 			ax = -nx * MARIO_ACCEL_SLOWING_DOWN_X; // TODO: To constant - the slowing down speed
-			if (nx == 1 && vx < 0) {
+			/*if (nx == 1 && vx < 0) {
 				vx = 0;
 				maxVx = 0;
 				ax = 0;
@@ -602,7 +608,7 @@ void CMario::SetState(int state)
 				vx = 0;
 				maxVx = 0;
 				ax = 0;
-			}
+			}*/
 		}
 
 		break;
@@ -652,12 +658,36 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}
 	}
-	else
+	else if (level == MARIO_LEVEL_SMALL)
 	{
 		left = x - MARIO_SMALL_BBOX_WIDTH / 2;
 		top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+	}
+	else if (level == MARIO_LEVEL_RACOON)
+	{
+	if (isSitting)
+	{
+		left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
+		top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
+		right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
+		bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
+	}
+	else
+	{
+		if (nx > 0)
+		{
+			left = x - MARIO_BIG_BBOX_WIDTH / 2 + 3;
+			right = left + MARIO_BIG_BBOX_WIDTH;
+		}
+		else {
+			left = x - MARIO_BIG_BBOX_WIDTH / 2 - 3;
+			right = left + MARIO_BIG_BBOX_WIDTH;
+		}
+		top = y - MARIO_BIG_BBOX_HEIGHT / 2;
+		bottom = top + MARIO_BIG_BBOX_HEIGHT;
+	}
 	}
 }
 
