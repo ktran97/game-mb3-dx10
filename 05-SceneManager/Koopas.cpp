@@ -142,6 +142,10 @@ void Koopas::SetState(int state)
 		InShell = true;
 		IsAttack = true;
 		break;
+	case KOOPAS_STATE_DIE_BY_SHELL:
+		vx = nx * GOOMBA_DIEBYSHELL_VX;
+		vy = -GOOMBA_DIEBYSHELL_VY;
+		break;
 	default:
 		break;
 	}

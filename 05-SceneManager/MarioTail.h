@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "QuestionBrick.h"
 
 #define TAIL_BBOX_WIDTH 8
 #define TAIL_BBOX_HEIGHT 5
@@ -24,6 +25,7 @@ public:
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	void OnCollisionWithGoomba(LPGAMEOBJECT& obj);
+	void OnCollisionWithQuestionBrick(LPGAMEOBJECT& obj);
 
 public:
 	int level, goombaPhase;
