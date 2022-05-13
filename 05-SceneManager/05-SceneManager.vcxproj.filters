@@ -34,18 +34,18 @@
     <Filter Include="items">
       <UniqueIdentifier>{05b63ab5-fdcb-4151-96ae-7fd34181c121}</UniqueIdentifier>
     </Filter>
+    <Filter Include="keys">
+      <UniqueIdentifier>{4d55ddf1-92bb-44be-81bb-b2064df9f137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="animations">
+      <UniqueIdentifier>{f261fd5c-e4af-4d8e-ab54-4118311634ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Animations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
@@ -61,9 +61,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Platform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SampleKeyEventHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sprite.cpp">
@@ -129,17 +126,17 @@
     <ClCompile Include="MarioTail.cpp">
       <Filter>mario</Filter>
     </ClCompile>
+    <ClCompile Include="SampleKeyEventHandler.cpp">
+      <Filter>keys</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Animations.cpp">
+      <Filter>animations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationFrame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Animations.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AssetIDs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -159,9 +156,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Platform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SampleKeyEventHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sprite.h">
@@ -232,6 +226,18 @@
     </ClInclude>
     <ClInclude Include="MarioTail.h">
       <Filter>mario</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleKeyEventHandler.h">
+      <Filter>keys</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>animations</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationFrame.h">
+      <Filter>animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Animations.h">
+      <Filter>animations</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
