@@ -248,6 +248,9 @@ public:
 				speedStack++;
 			}
 		}
+		else {
+			DebugOut(L">>> MARIO MAX SPEED STACK >>> \n");
+		}
 	}
 
 	void DecreaseSpeedStack() {

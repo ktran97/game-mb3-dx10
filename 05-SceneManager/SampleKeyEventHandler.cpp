@@ -19,6 +19,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_S:
 		if (mario->GetMarioLevel() == MARIO_LEVEL_RACOON && mario->GetSpeedStack() == MARIO_MAX_SPEED_STACK)
 		{
+			DebugOut(L"[INFO] Is flying %d\n");
 			mario->SetState(MARIO_STATE_FLYING);
 		}
 		if (!mario->isFlying)

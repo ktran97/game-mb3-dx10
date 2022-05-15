@@ -50,7 +50,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else {
 		if (speedStack > 0)
 			if (!isFlying)
-			DecreaseSpeedStack();
+				DecreaseSpeedStack();
 	}
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -177,6 +177,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
+	DebugOut(L">>> Mario conliision with brick>>> \n");
 	QuestionBrick* QBrick = dynamic_cast<QuestionBrick*>(e->obj);
 
 	//Check qbrick
@@ -221,6 +222,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		{
 			if (koopas->IsAttack)
 			{
+				DebugOut(L">>> Mario conllision with koopas >>> \n");
 				if (level > MARIO_LEVEL_SMALL)
 				{
 					level = MARIO_LEVEL_SMALL;
@@ -246,6 +248,7 @@ void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e)
 {
 	if (dynamic_cast<Mushroom*>(e->obj))
 	{
+		DebugOut(L">>> Mario conllison with mushroom >>> \n");
 		level = MARIO_LEVEL_BIG;
 		y -= 16;
 		e->obj->Delete();
@@ -397,7 +400,7 @@ int CMario::GetAniIdRacoon()
 			}
 			else if (vx > 0)
 			{
-				if(ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_ACCEL_RUN_X)
+				if (ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_RACOON_BRACE_RIGHT;
 				else if (ax == MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_RACOON_WALKING_RIGHT;
