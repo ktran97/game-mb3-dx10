@@ -2,11 +2,9 @@
 #include "GameObject.h"
 #include "QuestionBrick.h"
 #include "FirePiranhaPlant.h"
-
 #include "MarioTail.h"
 #include "Animation.h"
 #include "Animations.h"
-
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.1f
@@ -138,9 +136,6 @@
 
 #define GROUND_Y 160.0f
 
-
-
-
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_RACOON	3
@@ -160,24 +155,16 @@
 
 class CMario : public CGameObject
 {
-	BOOLEAN isSitting;
+	BOOLEAN isSitting, isOnPlatform;
 	float maxVx;
-	float ax;				// acceleration on x 
-	float ay;				// acceleration on y
-	bool IsSlowFalling, IsFalling;
-	DWORD SlowFallingTime, FallingTime;
-
-	bool isFly;
-	int speedStack;
-
+	float ax; // acceleration on x 
+	float ay; // acceleration on y
+	bool IsSlowFalling, IsFalling, isFly, IsAttack, IsKickKoopas;
+	int speedStack, level, coin;
+	DWORD SlowFallingTime, FallingTime, SpeedStackTime, AttackTime, KickKoopasTime, FlyingTime;
 	MarioTail* tail;
-
-	DWORD SpeedStackTime;
-
-	int level;
 	ULONGLONG untouchable_start;
-	BOOLEAN isOnPlatform;
-	int coin;
+
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -186,14 +173,6 @@ class CMario : public CGameObject
 	void OnCollisionWithItem(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlant(LPCOLLISIONEVENT e);
 
-	bool IsAttack;
-	DWORD AttackTime;
-
-	bool IsKickKoopas;
-	DWORD KickKoopasTime;
-
-	DWORD FlyingTime;
-
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRacoon();
@@ -201,7 +180,6 @@ class CMario : public CGameObject
 public:
 	int untouchable;
 	bool isFlying;
-	bool CheckMarioIsOnPlatform() { return isOnPlatform; };
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -219,50 +197,36 @@ public:
 		coin = 0;
 		speedStack = 0;
 		AttackTime = SpeedStackTime = 0;
-		tail = new MarioTail();	
+		tail = new MarioTail();
 	}
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void Render();
-	void SetState(int state);
 
-	int IsCollidable()
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
+	void Render() override;
+	void SetState(int state) override;
+	void OnNoCollision(DWORD dt) override;
+	void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt) override;
+	void SetLevel(int l);
+	void IncreaseSpeedStack();
+	void DecreaseSpeedStack();
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
+
+	bool CheckMarioIsOnPlatform()
+	{
+		return isOnPlatform;
+	};
+
+	int IsCollidable() override
 	{
 		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
-
-	void OnNoCollision(DWORD dt);
-	void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt);
-
-	void SetLevel(int l);
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-
-	void IncreaseSpeedStack() {
-		if (speedStack < MARIO_MAX_SPEED_STACK)
-		{
-			if (SpeedStackTime == 0)SpeedStackTime = GetTickCount64();
-			else if (GetTickCount64() - SpeedStackTime > MARIO_SPEEDSTACK_TIME)
-			{
-				SpeedStackTime = 0;
-				speedStack++;
-			}
-		}
-		else {
-			DebugOut(L">>> MARIO MAX SPEED STACK >>> \n");
-		}
+	int IsBlocking() override
+	{
+		return (state != MARIO_STATE_DIE && untouchable == 0);
 	}
 
-	void DecreaseSpeedStack() {
-		if (SpeedStackTime == 0)SpeedStackTime = GetTickCount64();
-		else if (GetTickCount64() - SpeedStackTime > MARIO_SPEEDSTACK_TIME)
-		{
-			SpeedStackTime = 0;
-			speedStack--;
-		}
-	}
-
-	int GetMarioLevel() {
+	int GetMarioLevel()
+	{
 		return level;
 	}
 
@@ -271,5 +235,9 @@ public:
 		return speedStack;
 	}
 
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void StartUntouchable()
+	{
+		untouchable = 1;
+		untouchable_start = GetTickCount64();
+	}
 };
