@@ -19,9 +19,6 @@
     <Filter Include="camera">
       <UniqueIdentifier>{60a777b8-ae71-48f7-bbe7-bd0836ff4116}</UniqueIdentifier>
     </Filter>
-    <Filter Include="colorbox">
-      <UniqueIdentifier>{23f71ba7-7b53-4bea-8857-0d581cda2af1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="enemies">
       <UniqueIdentifier>{c022639b-d6e7-4fa1-a6aa-9e40355e55ed}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,9 @@
     </Filter>
     <Filter Include="animations">
       <UniqueIdentifier>{f261fd5c-e4af-4d8e-ab54-4118311634ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="objects">
+      <UniqueIdentifier>{b0908ecc-8139-4fc9-af12-f372e11456d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -87,9 +87,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>camera</Filter>
     </ClCompile>
-    <ClCompile Include="ColorBox.cpp">
-      <Filter>colorbox</Filter>
-    </ClCompile>
     <ClCompile Include="Goomba.cpp">
       <Filter>enemies</Filter>
     </ClCompile>
@@ -114,9 +111,6 @@
     <ClCompile Include="Coin.cpp">
       <Filter>items</Filter>
     </ClCompile>
-    <ClCompile Include="Pipe.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FirePiranhaPlant.cpp">
       <Filter>enemies</Filter>
     </ClCompile>
@@ -134,6 +128,12 @@
     </ClCompile>
     <ClCompile Include="Animations.cpp">
       <Filter>animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipe.cpp">
+      <Filter>objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorBox.cpp">
+      <Filter>objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +188,6 @@
     <ClInclude Include="Camera.h">
       <Filter>camera</Filter>
     </ClInclude>
-    <ClInclude Include="ColorBox.h">
-      <Filter>colorbox</Filter>
-    </ClInclude>
     <ClInclude Include="Goomba.h">
       <Filter>enemies</Filter>
     </ClInclude>
@@ -215,9 +212,6 @@
     <ClInclude Include="Coin.h">
       <Filter>items</Filter>
     </ClInclude>
-    <ClInclude Include="Pipe.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FirePiranhaPlant.h">
       <Filter>enemies</Filter>
     </ClInclude>
@@ -238,6 +232,12 @@
     </ClInclude>
     <ClInclude Include="Animations.h">
       <Filter>animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipe.h">
+      <Filter>objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBox.h">
+      <Filter>objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
