@@ -7,6 +7,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "FirePiranhaPlant.h"
+#include "Leaf.h"
 
 
 class CPlayScene : public CScene
@@ -39,26 +40,7 @@ public:
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 
-	void AddItemToQBrick(LPGAMEOBJECT obj, int index) {
-		QuestionBrick* QBrick = dynamic_cast<QuestionBrick*>(obj);
-		CMario* mario = dynamic_cast<CMario*>(player);
-		float BrickX, BrickY;
-		obj->GetPosition(BrickX, BrickY);
-
-		if (QBrick->readyInnitItem)
-		{
-			if (QBrick->Item > 1)
-			{
-				Mushroom* mushroom = new Mushroom(BrickX, BrickY);
-				mushroom->SetState(MUSHROOM_STATE_BEING_INNITED);
-				objects[index] = mushroom;
-				objects.push_back(QBrick);
-			}
-			else QBrick->InitCoin = true;
-
-			QBrick->innitItemSuccess = true;
-		}
-	}
+	void AddItemToQBrick(LPGAMEOBJECT obj, int index);
 	void Clear();
 	void PurgeDeletedObjects();
 

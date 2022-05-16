@@ -385,6 +385,39 @@ void CPlayScene::Unload()
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
 
+void CPlayScene::AddItemToQBrick(LPGAMEOBJECT obj, int index) {
+	QuestionBrick* QBrick = dynamic_cast<QuestionBrick*>(obj);
+	CMario* mario = dynamic_cast<CMario*>(player);
+	float BrickX, BrickY;
+	obj->GetPosition(BrickX, BrickY);
+
+	if (QBrick->readyInnitItem)
+	{
+		if (QBrick->Item > 1)
+		{
+			if (mario->GetMarioLevel() == MARIO_LEVEL_SMALL)
+			{
+				DebugOut(L">>> Mushroom up >>> \n");
+				Mushroom* mushroom = new Mushroom(BrickX, BrickY);
+				mushroom->SetState(MUSHROOM_STATE_BEING_INNITED);
+				objects[index] = mushroom;
+				objects.push_back(QBrick);
+			}
+			else
+			{
+				DebugOut(L">>> Leaf up >>> \n");
+				Leaf* leaf = new Leaf(BrickX, BrickY);
+				leaf->SetState(LEAF_STATE_INNIT);
+				objects[index] = leaf;
+				objects.push_back(QBrick);
+			}
+		}
+		else QBrick->InitCoin = true;
+
+		QBrick->innitItemSuccess = true;
+	}
+}
+
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
 
 void CPlayScene::PurgeDeletedObjects()

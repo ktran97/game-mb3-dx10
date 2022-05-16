@@ -40,6 +40,9 @@
     <Filter Include="objects">
       <UniqueIdentifier>{b0908ecc-8139-4fc9-af12-f372e11456d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="scene">
+      <UniqueIdentifier>{5cd69922-e702-44f2-adf2-4952f0427365}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -70,9 +73,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Textures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
@@ -138,6 +138,9 @@
     <ClCompile Include="Leaf.cpp">
       <Filter>items</Filter>
     </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetIDs.h">
@@ -155,9 +158,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KeyEventHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Platform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -171,12 +171,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Textures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
@@ -244,6 +238,15 @@
     </ClInclude>
     <ClInclude Include="Leaf.h">
       <Filter>items</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEventHandler.h">
+      <Filter>keys</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
