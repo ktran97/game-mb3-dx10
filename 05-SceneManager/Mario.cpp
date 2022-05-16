@@ -8,6 +8,7 @@
 #include "ColorBox.h"
 #include "Koopas.h"
 #include "Collision.h"
+#include "Leaf.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -112,7 +113,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<FirePiranhaPlant*>(e->obj))
 		OnCollisionWithPlant(e);
-	else if (dynamic_cast<Mushroom*>(e->obj))
+	else if (dynamic_cast<Mushroom*>(e->obj) || dynamic_cast<Leaf*>(e->obj))
 		OnCollisionWithItem(e);
 }
 
@@ -178,7 +179,10 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 
 	//Check qbrick
 	if (!QBrick->innitItemSuccess) {
-		if (e->ny > 0)QBrick->SetState(QUESTION_BRICK_STATE_START_INNIT);
+		if (e->ny > 0)
+		{	
+			QBrick->SetState(QUESTION_BRICK_STATE_START_INNIT);
+		}
 	}
 }
 
@@ -246,6 +250,13 @@ void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e)
 	{
 		DebugOut(L">>> Mario conllison with mushroom >>> \n");
 		level = MARIO_LEVEL_BIG;
+		y -= 16;
+		e->obj->Delete();
+	}
+	else if (dynamic_cast<Leaf*>(e->obj))
+	{
+		DebugOut(L">>> Mario conllison with leaf >>> \n");
+		level = MARIO_LEVEL_RACOON;
 		y -= 16;
 		e->obj->Delete();
 	}

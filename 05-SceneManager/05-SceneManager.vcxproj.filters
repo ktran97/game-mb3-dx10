@@ -135,6 +135,9 @@
     <ClCompile Include="ColorBox.cpp">
       <Filter>objects</Filter>
     </ClCompile>
+    <ClCompile Include="Leaf.cpp">
+      <Filter>items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetIDs.h">
@@ -238,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="ColorBox.h">
       <Filter>objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Leaf.h">
+      <Filter>items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
