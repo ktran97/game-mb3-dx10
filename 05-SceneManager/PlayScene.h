@@ -50,7 +50,7 @@ public:
 			if (QBrick->Item > 1)
 			{
 				Mushroom* mushroom = new Mushroom(BrickX, BrickY);
-				mushroom->SetState(MUSHROOOM_STATE_BEING_INNITED);
+				mushroom->SetState(MUSHROOM_STATE_BEING_INNITED);
 				objects[index] = mushroom;
 				objects.push_back(QBrick);
 			}

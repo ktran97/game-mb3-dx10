@@ -6,6 +6,8 @@
 #include "Sprites.h"
 #include "Textures.h"
 #include "Game.h"
+#include "Camera.h"
+#include"debug.h"
 
 
 class Map

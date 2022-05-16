@@ -1,6 +1,4 @@
 #include "Map.h"
-#include "Camera.h"
-#include"debug.h"
 
 Map::Map(int ID, LPCWSTR FilePath_data, int Map_rows, int  Map_cols, int Num_row_read, int Num_col_read, int Tile_width, int Tile_height)
 {

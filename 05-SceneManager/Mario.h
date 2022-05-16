@@ -2,32 +2,33 @@
 #include "GameObject.h"
 #include "QuestionBrick.h"
 #include "FirePiranhaPlant.h"
-
 #include "MarioTail.h"
 #include "Animation.h"
 #include "Animations.h"
-
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_SLOWING_DOWN_X	0.00025f
+#define MARIO_ACCEL_SLOWING_DOWN_X	0.00015f
 #define MARIO_ACCEL_RUN_X	0.0007f
 #define MARIO_FRICTION		0.006f
 
-#define MARIO_JUMP_SPEED_Y		0.5f
-#define MARIO_JUMP_RUN_SPEED_Y	0.6f
+#define MARIO_JUMP_SPEED_Y		0.6f
+#define MARIO_JUMP_RUN_SPEED_Y	0.7f
 
 #define MARIO_GRAVITY			0.002f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.5f
+#define MARIO_SLOW_FALLING_SPEED  0.02f
 
 #define MARIO_MAX_SPEED_STACK	7
 
 #define MARIO_SPEEDSTACK_TIME 250
-
+#define MARIO_KICK_KOOPAS_TIME 200
+#define MARIO_SLOWFALLING_TIME 300
+#define RACOON_ATTACK_TIME 250
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -46,9 +47,44 @@
 #define MARIO_STATE_KICKKOOPAS	700
 #define MARIO_STATE_ATTACK	800
 
+#define MARIO_STATE_SLOW_FALLING	302
+#define MARIO_STATE_SLOW_FALLING_RELEASE	303
+
+#define MARIO_STATE_FLYING	900
 
 #pragma region ANIMATION_ID
+//RACOON
+#define ID_ANI_RACOON_IDLE_RIGHT 1900
+#define ID_ANI_RACOON_IDLE_LEFT 1901
 
+#define ID_ANI_RACOON_WALKING_RIGHT 1902
+#define ID_ANI_RACOON_WALKING_LEFT 1903
+
+#define ID_ANI_RACOON_JUMP_WALK_RIGHT 1904
+#define ID_ANI_RACOON_JUMP_WALK_LEFT 1905
+
+#define ID_ANI_RACOON_FALLING_RIGHT 1906
+#define ID_ANI_RACOON_FALLING_LEFT 1907
+
+#define ID_ANI_RACOON_RUNNING_RIGHT 1908
+#define ID_ANI_RACOON_RUNNING_LEFT 1909
+
+#define ID_ANI_RACOON_FLYING_RIGHT 1910
+#define ID_ANI_RACOON_FLYING_LEFT 1911
+
+#define ID_ANI_RACOON_SITTING_RIGHT 1912
+#define ID_ANI_RACOON_SITTING_LEFT 1913
+
+#define ID_ANI_RACOON_BRACE_RIGHT 1914
+#define ID_ANI_RACOON_BRACE_LEFT 1915
+
+#define ID_ANI_MARIO_SLOWFALLING_RIGHT	1916
+#define ID_ANI_MARIO_SLOWFALLING_LEFT	1917
+
+#define ID_ANI_RACOON_ATTACK_RIGHT	1918
+#define ID_ANI_RACOON_ATTACK_LEFT	1919
+
+//NORMAL
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
 
@@ -100,11 +136,9 @@
 
 #define GROUND_Y 160.0f
 
-
-
-
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define	MARIO_LEVEL_RACOON	3
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
@@ -121,22 +155,16 @@
 
 class CMario : public CGameObject
 {
-	BOOLEAN isSitting;
+	BOOLEAN isSitting, isOnPlatform;
 	float maxVx;
-	float ax;				// acceleration on x 
-	float ay;				// acceleration on y 
-
-	bool isFly;
-	int speedStack;
-
+	float ax; // acceleration on x 
+	float ay; // acceleration on y
+	bool IsSlowFalling, IsFalling, isFly, IsAttack, IsKickKoopas;
+	int speedStack, level, coin;
+	DWORD SlowFallingTime, FallingTime, SpeedStackTime, AttackTime, KickKoopasTime, FlyingTime;
 	MarioTail* tail;
-
-	DWORD SpeedStackTime;
-
-	int level;
 	ULONGLONG untouchable_start;
-	BOOLEAN isOnPlatform;
-	int coin;
+
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -145,16 +173,13 @@ class CMario : public CGameObject
 	void OnCollisionWithItem(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlant(LPCOLLISIONEVENT e);
 
-	bool IsAttack;
-	DWORD AttackTime;
-
-	bool IsKickKoopas;
-	DWORD KickKoopasTime;
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdRacoon();
 
 public:
 	int untouchable;
+	bool isFlying;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -162,8 +187,10 @@ public:
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
-		IsAttack = IsKickKoopas = false;
-		level = MARIO_LEVEL_SMALL;
+		/*IsAttack = IsKickKoopas = false;*/
+		isFlying = IsAttack = IsKickKoopas = false;
+		/*level = MARIO_LEVEL_SMALL;*/
+		level = MARIO_LEVEL_RACOON;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -172,46 +199,45 @@ public:
 		AttackTime = SpeedStackTime = 0;
 		tail = new MarioTail();
 	}
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void Render();
-	void SetState(int state);
 
-	int IsCollidable()
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
+	void Render() override;
+	void SetState(int state) override;
+	void OnNoCollision(DWORD dt) override;
+	void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt) override;
+	void SetLevel(int l);
+	void IncreaseSpeedStack();
+	void DecreaseSpeedStack();
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
+
+	bool CheckMarioIsOnPlatform()
+	{
+		return isOnPlatform;
+	};
+
+	int IsCollidable() override
 	{
 		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
-
-	void OnNoCollision(DWORD dt);
-	void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt);
-
-	void SetLevel(int l);
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-
-	void IncreaseSpeedStack() {
-		if (speedStack < MARIO_MAX_SPEED_STACK)
-		{
-			if (SpeedStackTime == 0)SpeedStackTime = GetTickCount64();
-			else if (GetTickCount64() - SpeedStackTime > MARIO_SPEEDSTACK_TIME)
-			{
-				SpeedStackTime = 0;
-				speedStack++;
-			}
-		}
+	int IsBlocking() override
+	{
+		return (state != MARIO_STATE_DIE && untouchable == 0);
 	}
 
-	void DecreaseSpeedStack() {
-		if (SpeedStackTime == 0)SpeedStackTime = GetTickCount64();
-		else if (GetTickCount64() - SpeedStackTime > MARIO_SPEEDSTACK_TIME)
-		{
-			SpeedStackTime = 0;
-			speedStack--;
-		}
-	}
-
-	int GetMarioLevel() {
+	int GetMarioLevel()
+	{
 		return level;
 	}
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	int GetSpeedStack()
+	{
+		return speedStack;
+	}
+
+	void StartUntouchable()
+	{
+		untouchable = 1;
+		untouchable_start = GetTickCount64();
+	}
 };

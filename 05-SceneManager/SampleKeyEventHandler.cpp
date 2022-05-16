@@ -17,7 +17,20 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_SIT);
 		break;
 	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
+		if (mario->GetMarioLevel() == MARIO_LEVEL_RACOON && mario->GetSpeedStack() == MARIO_MAX_SPEED_STACK)
+		{
+			DebugOut(L"[INFO] Is flying %d\n");
+			mario->SetState(MARIO_STATE_FLYING);
+		}
+		if (!mario->isFlying)
+		{
+			if (mario->CheckMarioIsOnPlatform())
+				mario->SetState(MARIO_STATE_JUMP);
+			else if (mario->GetMarioLevel() == MARIO_LEVEL_RACOON)
+			{
+				mario->SetState(MARIO_STATE_SLOW_FALLING);
+			}
+		}
 		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
@@ -25,11 +38,17 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_2:
 		mario->SetLevel(MARIO_LEVEL_BIG);
 		break;
+	case DIK_3:
+		mario->SetLevel(MARIO_LEVEL_RACOON);
+		break;
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
 	case DIK_R: // reset
 		//Reload();
+		break;
+	case DIK_A:
+		mario->SetState(MARIO_STATE_ATTACK);
 		break;
 	}
 }

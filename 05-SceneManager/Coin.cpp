@@ -1,5 +1,11 @@
 #include "Coin.h"
 
+void CCoin::Update(DWORD dt)
+{
+	x += vx * dt;
+	y += vy * dt;
+}
+
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
