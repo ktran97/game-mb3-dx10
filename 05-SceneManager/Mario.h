@@ -240,4 +240,9 @@ public:
 		untouchable = 1;
 		untouchable_start = GetTickCount64();
 	}
+
+	bool CheckIsFlying()
+	{
+		return isFlying;
+	}
 };

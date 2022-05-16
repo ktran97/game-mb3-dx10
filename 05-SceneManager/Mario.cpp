@@ -33,10 +33,41 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (isFlying)
 	{
+		//CAMERA FOLLOW MARIO
+		Camera::GetInstance()->IsFollowingMario = true;
+		if (y - CGame::GetInstance()->GetBackBufferHeight() / 2 < 240)
+		{
+			if (y - CGame::GetInstance()->GetBackBufferHeight() / 2 < 0)
+				Camera::GetInstance()->cam_y = 0;
+			else if (!isOnPlatform)
+			{
+				Camera::GetInstance()->cam_vy = vy;
+				Camera::GetInstance()->Update(dt);
+			}
+		}
+		else { Camera::GetInstance()->cam_y = 240; }
+
 		if (GetTickCount64() - FlyingTime >= 3000)
 		{
 			isFlying = false;
 			if (!isOnPlatform)SetState(MARIO_STATE_RELEASE_JUMP);
+		}
+	}
+
+	if (Camera::GetInstance()->cam_y < 240 && !isFlying)
+	{
+		if (y - CGame::GetInstance()->GetBackBufferHeight() / 2 < 0)
+			Camera::GetInstance()->cam_y = 0;
+		else if (!isOnPlatform)
+		{
+			Camera::GetInstance()->cam_vy = vy;
+			Camera::GetInstance()->Update(dt);
+		}
+	}
+	else {
+		if (!isFlying)
+		{
+			Camera::GetInstance()->IsFollowingMario = false;
 		}
 	}
 
@@ -180,7 +211,7 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 	//Check qbrick
 	if (!QBrick->innitItemSuccess) {
 		if (e->ny > 0)
-		{	
+		{
 			QBrick->SetState(QUESTION_BRICK_STATE_START_INNIT);
 		}
 	}
