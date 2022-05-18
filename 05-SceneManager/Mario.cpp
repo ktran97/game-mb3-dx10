@@ -499,6 +499,32 @@ int CMario::GetAniIdRacoon()
 			else aniId = ID_ANI_RACOON_ATTACK_LEFT;
 		}
 	}
+	//ANI RACOON IS FLYING
+	if (isFlying)
+	{
+		if (vy > 0)
+		{
+			if (nx > 0)
+			{
+				aniId = ID_ANI_RACOON_FLYING_RIGHT;
+			}
+			else
+			{
+				aniId = ID_ANI_RACOON_FLYING_LEFT;
+			}
+		}
+		else if (vy < 0)
+		{
+			if (nx > 0)
+			{
+				aniId = ID_ANI_RACOON_FLYING_RIGHT;
+			}
+			else
+			{
+				aniId = ID_ANI_RACOON_FLYING_LEFT;
+			}
+		}
+	}
 
 	return aniId;
 }
