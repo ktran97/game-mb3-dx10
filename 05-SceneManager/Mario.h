@@ -84,6 +84,9 @@
 #define ID_ANI_RACOON_ATTACK_RIGHT	1918
 #define ID_ANI_RACOON_ATTACK_LEFT	1919
 
+#define ID_ANI_RACOON_KICKKOOPAS_RIGHT	1923
+#define ID_ANI_RACOON_KICKKOOPAS_LEFT	1924
+
 //NORMAL
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
@@ -156,11 +159,21 @@
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting, isOnPlatform;
+
 	float maxVx;
 	float ax; // acceleration on x 
 	float ay; // acceleration on y
-	bool IsSlowFalling, IsFalling, isFly, IsAttack, IsKickKoopas;
-	int speedStack, level, coin;
+
+	bool IsSlowFalling;
+	bool IsFalling;
+	bool isFly;
+	bool IsAttack;
+	bool IsKickKoopas;
+
+	int speedStack;
+	int level;
+	int coin;
+
 	DWORD SlowFallingTime, FallingTime, SpeedStackTime, AttackTime, KickKoopasTime, FlyingTime;
 	MarioTail* tail;
 	ULONGLONG untouchable_start;
@@ -187,7 +200,6 @@ public:
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
-		/*IsAttack = IsKickKoopas = false;*/
 		isFlying = IsAttack = IsKickKoopas = false;
 		/*level = MARIO_LEVEL_SMALL;*/
 		level = MARIO_LEVEL_RACOON;
@@ -205,6 +217,7 @@ public:
 	void SetState(int state) override;
 	void OnNoCollision(DWORD dt) override;
 	void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt) override;
+
 	void SetLevel(int l);
 	void IncreaseSpeedStack();
 	void DecreaseSpeedStack();

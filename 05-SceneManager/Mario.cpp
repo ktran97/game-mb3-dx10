@@ -33,7 +33,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (isFlying)
 	{
-		//CAMERA FOLLOW MARIO
+		//CAMERA FOLLOW MARIO WHILE FLYING
 		Camera::GetInstance()->IsFollowingMario = true;
 		if (y - CGame::GetInstance()->GetBackBufferHeight() / 2 < 240)
 		{
@@ -78,8 +78,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else {
 		if (speedStack > 0)
+		{
 			if (!isFlying)
+			{
 				DecreaseSpeedStack();
+			}
+		}
 	}
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -87,6 +91,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+
+	//KICK KOOPAS
 	if (IsKickKoopas)
 	{
 		if (GetTickCount64() - KickKoopasTime >= MARIO_KICK_KOOPAS_TIME)
@@ -94,8 +100,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			IsKickKoopas = false;
 		}
 	}
+
 	isOnPlatform = false;
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
 	if (IsAttack)
 	{
 		if (nx > 0)
@@ -226,7 +234,6 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		{
 			if (koopas->level < PARA_KOOPAS)
 			{
-
 				switch (koopas->GetState())
 				{
 				case KOOPAS_STATE_WALKING:
@@ -464,25 +471,30 @@ int CMario::GetAniIdRacoon()
 		else if (ax == MARIO_ACCEL_SLOWING_DOWN_X)
 			aniId = ID_ANI_RACOON_WALKING_LEFT;
 	}
-
+	//ANI SLOW FALLING
 	if (IsSlowFalling)
 	{
+		DebugOut(L">>> RACOON IS SLOW FALLING >>> \n");
 		if (nx > 0)
 			aniId = ID_ANI_MARIO_SLOWFALLING_RIGHT;
 		else
 			aniId = ID_ANI_MARIO_SLOWFALLING_LEFT;
 	}
-
+	//ANI KICK KOOPAS
 	if (IsKickKoopas) {
+		DebugOut(L">>> RACOON IS KICKING >>> \n");
 		if (nx > 0)
-			aniId = ID_ANI_MARIO_KICKKOOPAS_RIGHT;
+			aniId = ID_ANI_RACOON_KICKKOOPAS_RIGHT;
 		else
-			aniId = ID_ANI_MARIO_KICKKOOPAS_LEFT;
+			aniId = ID_ANI_RACOON_KICKKOOPAS_LEFT;
 	}
+
 	if (aniId == -1) aniId = ID_ANI_RACOON_IDLE_RIGHT;
+	//ANI RACOON ATK
 	if (IsAttack)
 	{
 		if (level == MARIO_LEVEL_RACOON) {
+			DebugOut(L">>> RACOON IS ATK >>> \n");
 			if (nx > 0)aniId = ID_ANI_RACOON_ATTACK_RIGHT;
 			else aniId = ID_ANI_RACOON_ATTACK_LEFT;
 		}
