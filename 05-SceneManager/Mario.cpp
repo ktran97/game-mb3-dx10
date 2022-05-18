@@ -1,14 +1,5 @@
 #include <algorithm>
-#include "debug.h"
 #include "Mario.h"
-#include "Game.h"
-#include "Goomba.h"
-#include "Coin.h"
-#include "Portal.h"
-#include "ColorBox.h"
-#include "Koopas.h"
-#include "Collision.h"
-#include "Leaf.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -20,6 +11,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state == MARIO_STATE_IDLE) {
 		if (nx > 0 && vx < 0) { vx = 0; ax = 0; }
 		else if (nx < 0 && vx > 0) { vx = 0; ax = 0; }
+	}
+	else if (state == RACOON_STATE_IS_ATTACKED)
+	{
+		if (GetTickCount64() - effectTime > RACOON_IS_ATTACKED_TIME)
+		{
+			level = MARIO_LEVEL_BIG;
+			ay = MARIO_GRAVITY;
+			SetState(MARIO_STATE_IDLE);
+		}
 	}
 
 	if (IsSlowFalling)
@@ -72,7 +72,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 
-	if (abs(ax) == MARIO_ACCEL_RUN_X)
+	if (abs(ax) == MARIO_ACCEL_RUN_X && abs(vx) > MARIO_WALKING_SPEED)
 	{
 		IncreaseSpeedStack();
 	}
@@ -101,9 +101,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	isOnPlatform = false;
-	CCollision::GetInstance()->Process(this, dt, coObjects);
-
+	//ATTACK
 	if (IsAttack)
 	{
 		if (nx > 0)
@@ -119,6 +117,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
+	//HOLDING KOOPAS
+	if (CheckMarioHoldKoopas())
+	{
+		DebugOut(L">>> Mario is holding koopas shell >>> \n");
+		if (nx > 0)
+		{
+			koopasHold->SetPosition(x - MARIO_BIG_BBOX_WIDTH, y);
+		}
+		else
+		{
+			koopasHold->SetPosition(x - MARIO_BIG_BBOX_WIDTH, y);
+		}
+	}
+
+	isOnPlatform = false;
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -729,8 +743,11 @@ void CMario::SetState(int state)
 		IsKickKoopas = true;
 		break;
 	case MARIO_STATE_ATTACK:
-		IsAttack = true;
-		AttackTime = GetTickCount64();
+		if (level == MARIO_LEVEL_RACOON)
+		{
+			IsAttack = true;
+			AttackTime = GetTickCount64();
+		}
 		break;
 	case MARIO_STATE_SLOW_FALLING:
 		ay = 0;
@@ -748,6 +765,13 @@ void CMario::SetState(int state)
 			isFlying = true;
 			FlyingTime = GetTickCount64();
 		}
+		break;
+	case MARIO_STATE_RELEASE_KOOPAS:
+		isHoldingKoopas = false;
+		koopasHold->setIsHold(false);
+		koopasHold->nx = nx;
+		koopasHold->SetPosition(koopasHold->x + 3, y);
+		koopasHold->SetState(KOOPAS_STATE_INSHELL_ATTACK);
 		break;
 	}
 

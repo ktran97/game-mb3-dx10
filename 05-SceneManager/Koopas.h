@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 #include "NavigationBox.h"
+#include "QuestionBrick.h"
+#include "Goomba.h"
 
 #define KOOPAS_GRAVITY 0.0007f
 #define KOOPAS_WALKING_SPEED 0.03f
@@ -32,9 +34,10 @@
 class Koopas : public CGameObject
 {
 protected:
-
+	float ay;
 	bool ParaKoopas;
 
+	bool isHold;
 	bool InShell;
 	DWORD phaseTime;
 
@@ -61,4 +64,14 @@ public:
 	bool IsAttack;
 	Koopas(float x, float y, int Level);
 	virtual void SetState(int state);
+
+	bool getIsHold()
+	{
+		return this->isHold;
+	}
+
+	void setIsHold (boolean newIsHold)
+	{
+		this->isHold = newIsHold;
+	}
 };

@@ -3,6 +3,17 @@
 #include "QuestionBrick.h"
 #include "FirePiranhaPlant.h"
 #include "MarioTail.h"
+#include "Koopas.h"
+#include "Game.h"
+#include "Goomba.h"
+#include "Coin.h"
+#include "Portal.h"
+#include "ColorBox.h"
+#include "Koopas.h"
+#include "Collision.h"
+#include "Leaf.h"
+
+
 #include "Animation.h"
 #include "Animations.h"
 #include "debug.h"
@@ -11,7 +22,7 @@
 #define MARIO_RUNNING_SPEED		0.3f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_SLOWING_DOWN_X	0.00015f
+#define MARIO_ACCEL_SLOWING_DOWN_X	0.00035f
 #define MARIO_ACCEL_RUN_X	0.0007f
 #define MARIO_FRICTION		0.006f
 
@@ -29,6 +40,7 @@
 #define MARIO_KICK_KOOPAS_TIME 200
 #define MARIO_SLOWFALLING_TIME 300
 #define RACOON_ATTACK_TIME 250
+#define RACOON_IS_ATTACKED_TIME	600
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -51,6 +63,10 @@
 #define MARIO_STATE_SLOW_FALLING_RELEASE	303
 
 #define MARIO_STATE_FLYING	900
+
+#define RACOON_STATE_IS_ATTACKED	901
+
+#define MARIO_STATE_RELEASE_KOOPAS	1000
 
 #pragma region ANIMATION_ID
 //RACOON
@@ -165,17 +181,32 @@ class CMario : public CGameObject
 	float ay; // acceleration on y
 
 	bool IsSlowFalling;
+	DWORD SlowFallingTime;
+
 	bool IsFalling;
-	bool isFly;
+	DWORD FallingTime;
+
+	DWORD FlyingTime;
+
 	bool IsAttack;
+	DWORD AttackTime;
+
 	bool IsKickKoopas;
+	DWORD KickKoopasTime;
+
+	bool isHoldingKoopas;
+	DWORD effectTime;
 
 	int speedStack;
 	int level;
 	int coin;
 
-	DWORD SlowFallingTime, FallingTime, SpeedStackTime, AttackTime, KickKoopasTime, FlyingTime;
 	MarioTail* tail;
+	Koopas* koopasHold;
+	
+	DWORD SpeedStackTime;
+
+
 	ULONGLONG untouchable_start;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -258,4 +289,9 @@ public:
 	{
 		return isFlying;
 	}
+
+	bool CheckMarioHoldKoopas() {
+		return isHoldingKoopas;
+	}
+
 };

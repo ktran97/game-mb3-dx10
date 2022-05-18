@@ -1,37 +1,51 @@
 #include "Koopas.h"
 #include "debug.h"
-#include "QuestionBrick.h"
-#include "Goomba.h"
+
+Koopas::Koopas(float x, float y, int Level) :CGameObject(x, y)
+{
+	level = Level;
+	SetState(KOOPAS_STATE_WALKING);
+	NavBox = new NavigationBox(x, y);
+	setIsHold(false);
+	ay = KOOPAS_GRAVITY;
+}
 
 void Koopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state != KOOPAS_STATE_DIE_BY_SHELL)
-	if (!InShell) {
-		top = y - KOOPAS_BBOX_HEIGHT / 2;
-		bottom = top + KOOPAS_BBOX_HEIGHT;
+	if (!getIsHold())
+	{
+		if (state != KOOPAS_STATE_DIE_BY_SHELL)
+			if (!InShell) {
+				top = y - KOOPAS_BBOX_HEIGHT / 2;
+				bottom = top + KOOPAS_BBOX_HEIGHT;
+			}
+			else {
+				top = y - KOOPAS_BBOX_HIDDEN / 2;
+				bottom = top + KOOPAS_BBOX_HIDDEN;
+			}
+		left = x - KOOPAS_BBOX_WIDTH / 2;
+		right = left + KOOPAS_BBOX_WIDTH;
 	}
-	else {
-		top = y - KOOPAS_BBOX_HIDDEN / 2;
-		bottom = top + KOOPAS_BBOX_HIDDEN;
-	}
-	left = x - KOOPAS_BBOX_WIDTH / 2;
-	right = left + KOOPAS_BBOX_WIDTH;
 
 }
 
 void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += KOOPAS_GRAVITY * dt;
-	if (state == KOOPAS_STATE_WALKING && level == SMART_KOOPAS)
+	if (!getIsHold())
 	{
-		if (vx > 0)NavBox->SetPosition(x + KOOPAS_BBOX_WIDTH, y);
-		else NavBox->SetPosition(x - KOOPAS_BBOX_WIDTH, y);
-		NavBox->Update(dt, coObjects);
-		float navX, navY;
-		NavBox->GetPosition(navX, navY);
-		if (navY - y >= KOOPAS_NAVBOX_DISTANCE)vx = -vx;
+		vy += KOOPAS_GRAVITY * dt;
+		if (state == KOOPAS_STATE_WALKING && level == SMART_KOOPAS)
+		{
+			if (vx > 0)NavBox->SetPosition(x + KOOPAS_BBOX_WIDTH, y);
+			else NavBox->SetPosition(x - KOOPAS_BBOX_WIDTH, y);
+			NavBox->Update(dt, coObjects);
+			float navX, navY;
+			NavBox->GetPosition(navX, navY);
+			if (navY - y >= KOOPAS_NAVBOX_DISTANCE)vx = -vx;
 
+		}
 	}
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -115,13 +129,6 @@ void Koopas::GetRedKoopasAni(int& IdAni)
 	}
 	else if (state == KOOPAS_STATE_INSHELL || state == KOOPAS_STATE_DIE_BY_SHELL)IdAni = ID_ANI_REDKOOPAS_INSHELL;
 	else if (state == KOOPAS_STATE_INSHELL_ATTACK)IdAni = ID_ANI_REDKOOPAS_INSHELL_ATTACK;
-}
-
-Koopas::Koopas(float x, float y, int Level) :CGameObject(x, y)
-{
-	level = Level;
-	SetState(KOOPAS_STATE_WALKING);
-	NavBox = new NavigationBox(x, y);
 }
 
 void Koopas::SetState(int state)
