@@ -286,11 +286,22 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 					SetState(MARIO_STATE_DIE);
 				}
 			}
-			else if (e->nx != 0)
+		}
+		if (e->nx != 0 && !koopas->IsAttack)
+		{
+			if (abs(ax) != MARIO_ACCEL_RUN_X)
 			{
 				koopas->nx = nx;
 				SetState(MARIO_STATE_KICKKOOPAS);
 				koopas->SetState(KOOPAS_STATE_INSHELL_ATTACK);
+			}
+			else if (abs(ax) == MARIO_ACCEL_RUN_X)
+			{
+				koopas->SetSpeed(0, 0);
+				isHoldingKoopas = true;
+				koopas->setIsHold(true);
+				koopasHold = dynamic_cast<Koopas*>(e->obj);
+				DebugOut(L">>>mario is holding koopas >>> \n");
 			}
 		}
 	}
