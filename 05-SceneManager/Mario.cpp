@@ -120,14 +120,30 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//HOLDING KOOPAS
 	if (CheckMarioHoldKoopas())
 	{
-		DebugOut(L">>> Mario is holding koopas shell >>> \n");
-		if (nx > 0)
-		{
-			koopasHold->SetPosition(x - MARIO_BIG_BBOX_WIDTH, y);
-		}
+		float koopasX, koopasY;
+
+		if (level == MARIO_LEVEL_SMALL)
+			koopasY = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 		else
+			koopasY = y;
+		if (level == MARIO_LEVEL_RACOON)
 		{
-			koopasHold->SetPosition(x - MARIO_BIG_BBOX_WIDTH, y);
+			koopasX = x;
+		}
+		else {
+			if (nx > 0)
+				koopasX = x - KOOPAS_BBOX_WIDTH / 4;
+			else
+				koopasX = x + KOOPAS_BBOX_WIDTH / 4;
+		}
+		if (nx > 0)
+			koopasHold->SetPosition(koopasX + MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2, koopasY);
+		else
+			koopasHold->SetPosition(koopasX - MARIO_BIG_BBOX_WIDTH, koopasY);
+		if (koopasHold->GetState() == KOOPAS_STATE_WALKING)
+		{
+			koopasHold->y -= (KOOPAS_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT) / 2;
+			isHoldingKoopas = false;
 		}
 	}
 
@@ -375,39 +391,50 @@ int CMario::GetAniIdSmall()
 		else
 			aniId = ID_ANI_MARIO_SIT_LEFT;
 	}
-	else if (vx == 0)
+	else
 	{
-		if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
-		else aniId = ID_ANI_MARIO_SMALL_IDLE_LEFT;
-	}
-	else if (vx > 0)
-	{
-		if (ax < 0 && state != MARIO_STATE_IDLE)
-			aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
-		else if (ax == MARIO_ACCEL_WALK_X || ax == -MARIO_ACCEL_SLOWING_DOWN_X)
-			aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
-		else if (ax == MARIO_ACCEL_RUN_X)
+		if (vx == 0)
 		{
-			if (speedStack == MARIO_MAX_SPEED_STACK)
-				aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+			if (isHoldingKoopas)
+			{
+				if (nx > 0) aniId = ID_ANI_SMALLMARIO_HOLDKOOPAS_IDLE_RIGHT;
+				else aniId = ID_ANI_SMALLMARIO_HOLDKOOPAS_IDLE_LEFT;
+			}
 			else
+			{
+				if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+				else aniId = ID_ANI_MARIO_SMALL_IDLE_LEFT;
+			}
+		}
+		else if (vx > 0)
+		{
+			if (ax < 0 && state != MARIO_STATE_IDLE)
+				aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
+			else if (ax == MARIO_ACCEL_WALK_X || ax == -MARIO_ACCEL_SLOWING_DOWN_X)
 				aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
+			else if (ax == MARIO_ACCEL_RUN_X)
+			{
+				if (speedStack == MARIO_MAX_SPEED_STACK)
+					aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
+			}
 		}
-	}
-	else // vx < 0
-	{
-		if (ax > 0 && state != MARIO_STATE_IDLE)
-			aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
-		else if (ax == -MARIO_ACCEL_WALK_X || ax == MARIO_ACCEL_SLOWING_DOWN_X)
-			aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
-		else if (ax == -MARIO_ACCEL_RUN_X)
+		else // vx < 0
 		{
-			if (speedStack == MARIO_MAX_SPEED_STACK)
-				aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
-			else
+			if (ax > 0 && state != MARIO_STATE_IDLE)
+				aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
+			else if (ax == -MARIO_ACCEL_WALK_X || ax == MARIO_ACCEL_SLOWING_DOWN_X)
 				aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
-		}
+			else if (ax == -MARIO_ACCEL_RUN_X)
+			{
+				if (speedStack == MARIO_MAX_SPEED_STACK)
+					aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
+				else
+					aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
+			}
 
+		}
 	}
 	if (IsKickKoopas) {
 		if (nx > 0)
@@ -459,42 +486,55 @@ int CMario::GetAniIdRacoon()
 		else
 			aniId = ID_ANI_RACOON_SITTING_LEFT;
 	}
-	else if (vx == 0)
+	else
 	{
-		if (nx > 0) aniId = ID_ANI_RACOON_IDLE_RIGHT;
-		else aniId = ID_ANI_RACOON_IDLE_LEFT;
-	}
-	else if (vx > 0)
-	{
-		if (ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_ACCEL_RUN_X)
-			aniId = ID_ANI_RACOON_BRACE_RIGHT;
-		else if (ax == MARIO_ACCEL_WALK_X)
-			aniId = ID_ANI_RACOON_WALKING_RIGHT;
-		else if (ax == MARIO_ACCEL_RUN_X)
+		if (vx == 0)
 		{
-			if (speedStack == MARIO_MAX_SPEED_STACK)
-				aniId = ID_ANI_RACOON_RUNNING_RIGHT;
+			//HOLDING KOOPAS
+			//TODO: NOT HANDLE RACOON HAVE COULD ATTACKED KOOPAS YET
+			if (isHoldingKoopas)
+			{
+				if (nx > 0) aniId = ID_ANI_RACOON_HOLDKOOPAS_IDLE_RIGHT;
+				else aniId = ID_ANI_RACOON_HOLDKOOPAS_IDLE_LEFT;
+			}
 			else
+			{
+				if (nx > 0) aniId = ID_ANI_RACOON_IDLE_RIGHT;
+				else aniId = ID_ANI_RACOON_IDLE_LEFT;
+			}
+		}
+		else if (vx > 0)
+		{
+			if (ax == -MARIO_ACCEL_WALK_X || ax == -MARIO_ACCEL_RUN_X)
+				aniId = ID_ANI_RACOON_BRACE_RIGHT;
+			else if (ax == MARIO_ACCEL_WALK_X)
+				aniId = ID_ANI_RACOON_WALKING_RIGHT;
+			else if (ax == MARIO_ACCEL_RUN_X)
+			{
+				if (speedStack == MARIO_MAX_SPEED_STACK)
+					aniId = ID_ANI_RACOON_RUNNING_RIGHT;
+				else
+					aniId = ID_ANI_RACOON_WALKING_RIGHT;
+			}
+			else if (ax == -MARIO_ACCEL_SLOWING_DOWN_X)
 				aniId = ID_ANI_RACOON_WALKING_RIGHT;
 		}
-		else if (ax == -MARIO_ACCEL_SLOWING_DOWN_X)
-			aniId = ID_ANI_RACOON_WALKING_RIGHT;
-	}
-	else // vx < 0
-	{
-		if (ax == MARIO_ACCEL_WALK_X || ax == MARIO_ACCEL_RUN_X)
-			aniId = ID_ANI_RACOON_BRACE_LEFT;
-		else if (ax == -MARIO_ACCEL_WALK_X)
-			aniId = ID_ANI_RACOON_WALKING_LEFT;
-		else if (ax == -MARIO_ACCEL_RUN_X)
+		else // vx < 0
 		{
-			if (speedStack == MARIO_MAX_SPEED_STACK)
-				aniId = ID_ANI_RACOON_RUNNING_LEFT;
-			else
+			if (ax == MARIO_ACCEL_WALK_X || ax == MARIO_ACCEL_RUN_X)
+				aniId = ID_ANI_RACOON_BRACE_LEFT;
+			else if (ax == -MARIO_ACCEL_WALK_X)
+				aniId = ID_ANI_RACOON_WALKING_LEFT;
+			else if (ax == -MARIO_ACCEL_RUN_X)
+			{
+				if (speedStack == MARIO_MAX_SPEED_STACK)
+					aniId = ID_ANI_RACOON_RUNNING_LEFT;
+				else
+					aniId = ID_ANI_RACOON_WALKING_LEFT;
+			}
+			else if (ax == MARIO_ACCEL_SLOWING_DOWN_X)
 				aniId = ID_ANI_RACOON_WALKING_LEFT;
 		}
-		else if (ax == MARIO_ACCEL_SLOWING_DOWN_X)
-			aniId = ID_ANI_RACOON_WALKING_LEFT;
 	}
 	//ANI SLOW FALLING
 	if (IsSlowFalling)
@@ -586,8 +626,16 @@ int CMario::GetAniIdBig()
 	}
 	else if (vx == 0)
 	{
-		if (nx > 0) aniId = ID_ANI_MARIO_IDLE_RIGHT;
-		else aniId = ID_ANI_MARIO_IDLE_LEFT;
+		if (isHoldingKoopas)
+		{
+			if (nx > 0) aniId = ID_ANI_MARIO_HOLDKOOPAS_IDLE_RIGHT;
+			else aniId = ID_ANI_MARIO_HOLDKOOPAS_IDLE_LEFT;
+		}
+		else
+		{
+			if (nx > 0) aniId = ID_ANI_MARIO_IDLE_RIGHT;
+			else aniId = ID_ANI_MARIO_IDLE_LEFT;
+		}
 	}
 	else if (vx > 0)
 	{

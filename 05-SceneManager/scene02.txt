@@ -15,7 +15,7 @@ pipe.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	50	200
+0	600	200
 
 #GOOMBA (1=NORMAL,2=PARA)
 2	200	400	1

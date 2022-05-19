@@ -67,9 +67,9 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
 		break;
 	case DIK_A:
-		DebugOut(L">>>key up A >>> \n");
 		if (mario->CheckMarioHoldKoopas())
 		{
+			DebugOut(L">>> Mario release koopas shell after key up A>>> \n");
 			mario->SetState(MARIO_STATE_RELEASE_KOOPAS);
 		}
 		break;
