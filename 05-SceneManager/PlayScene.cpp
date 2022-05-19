@@ -312,11 +312,12 @@ void CPlayScene::Update(DWORD dt)
 	}
 	Mario.push_back(objects[0]);
 
-	for (size_t i = 0; i < FirePiranhaPlants.size(); i++) {
+	/*for (size_t i = 0; i < FirePiranhaPlants.size(); i++) {
 		FirePiranhaPlants[i]->GetEnemyPos(player->x, player->y);
 		FirePiranhaPlants[i]->Update(dt, &Mario);
-	}
+	}*/
 
+	//Loop into objects -> render Object
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (dynamic_cast<FirePiranhaPlant*>(objects[i]))
@@ -325,7 +326,11 @@ void CPlayScene::Update(DWORD dt)
 			Fplant->GetEnemyPos(player->x, player->y);
 			objects[i]->Update(dt, &Mario);
 		}
-		else objects[i]->Update(dt, &coObjects);
+		//CHECK IN CAMERA -> LOAD OBJECT
+		else if (Camera::GetInstance()->IsInCam(objects[i]->x, objects[i]->y) || dynamic_cast<CMario*>(objects[i]))
+		{
+			objects[i]->Update(dt, &coObjects);
+		}
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
