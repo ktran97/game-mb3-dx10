@@ -146,7 +146,7 @@ void Koopas::SetState(int state)
 		IsAttack = false;
 		break;
 	case KOOPAS_STATE_INSHELL_ATTACK:
-		vx = nx * KOOPAS_WALKING_SPEED * 4;
+		vx = nx * KOOPAS_WALKING_SPEED * 5;
 		InShell = true;
 		IsAttack = true;
 		break;
@@ -155,6 +155,10 @@ void Koopas::SetState(int state)
 		vy = -GOOMBA_DIEBYSHELL_VY;
 		InShell = true;
 		IsAttack = false;
+		if (level == PARA_KOOPAS)
+		{
+			level = NORMAL_KOOPAS;
+		}
 		break;
 	default:
 		break;
