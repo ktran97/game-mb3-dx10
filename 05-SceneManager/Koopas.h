@@ -24,7 +24,7 @@
 
 #define NORMAL_KOOPAS	1
 #define SMART_KOOPAS	2
-#define PARA_KOOPAS	3
+#define PARA_KOOPAS		3
 
 #define KOOPAS_BBOX_WIDTH 16
 #define KOOPAS_BBOX_HEIGHT 28
