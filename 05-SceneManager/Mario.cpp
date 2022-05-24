@@ -842,7 +842,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 
 	if (IsAttack)tail->Render();
 
@@ -966,10 +966,14 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_RELEASE_KOOPAS:
+		float koopasY;
 		isHoldingKoopas = false;
 		koopasHold->setIsHold(false);
 		koopasHold->nx = nx;
-		koopasHold->SetPosition(koopasHold->x + 3, y);
+		if (level == MARIO_LEVEL_SMALL)
+			koopasY = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+		else koopasY = y;
+		koopasHold->SetPosition(koopasHold->x + KOOPAS_BBOX_WIDTH / 8, koopasY);
 		koopasHold->SetState(KOOPAS_STATE_INSHELL_ATTACK);
 		break;
 	}
@@ -1015,14 +1019,10 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		else
 		{
 			if (nx > 0)
-			{
-				left = x - MARIO_BIG_BBOX_WIDTH / 2 + 3;
-				right = left + MARIO_BIG_BBOX_WIDTH;
-			}
-			else {
-				left = x - MARIO_BIG_BBOX_WIDTH / 2 - 3;
-				right = left + MARIO_BIG_BBOX_WIDTH;
-			}
+				left = x - MARIO_BIG_BBOX_WIDTH / 2 + 1;
+			else
+				left = x - MARIO_BIG_BBOX_WIDTH / 2 + 2;
+			right = left + MARIO_BIG_BBOX_WIDTH - 2;
 			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}

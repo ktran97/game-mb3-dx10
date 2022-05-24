@@ -44,10 +44,11 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (navY - y >= KOOPAS_NAVBOX_DISTANCE)vx = -vx;
 
 		}
+		CCollision::GetInstance()->Process(this, dt, coObjects);
 	}
-
-	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
+
+
 
 void Koopas::Render()
 {
@@ -55,8 +56,8 @@ void Koopas::Render()
 	if (level == NORMAL_KOOPAS)GetKoopasAni(aniId);
 	else if (level == SMART_KOOPAS)GetRedKoopasAni(aniId);
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	//RenderBoundingBox();
-	//NavBox->Render();
+	RenderBoundingBox();
+	NavBox->Render();
 }
 
 void Koopas::OnNoCollision(DWORD dt)
@@ -139,6 +140,8 @@ void Koopas::SetState(int state)
 		vx = -KOOPAS_WALKING_SPEED;
 		IsAttack = true;
 		InShell = false;
+		setIsHold(false);
+		y -= (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HIDDEN) / 2;
 		break;
 	case KOOPAS_STATE_INSHELL:
 		vx = 0;
@@ -146,7 +149,7 @@ void Koopas::SetState(int state)
 		IsAttack = false;
 		break;
 	case KOOPAS_STATE_INSHELL_ATTACK:
-		vx = nx * KOOPAS_WALKING_SPEED * 5;
+		vx = nx * KOOPAS_WALKING_SPEED * 4;
 		InShell = true;
 		IsAttack = true;
 		break;
