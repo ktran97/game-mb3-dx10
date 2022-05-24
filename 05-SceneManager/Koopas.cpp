@@ -17,7 +17,7 @@ void Koopas::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		if (state != KOOPAS_STATE_DIE_BY_SHELL)
 			if (!InShell) {
 				top = y - KOOPAS_BBOX_HEIGHT / 2;
-				bottom = top + KOOPAS_BBOX_HEIGHT;
+				bottom = top + KOOPAS_BBOX_HEIGHT - 2;
 			}
 			else {
 				top = y - KOOPAS_BBOX_HIDDEN / 2;
@@ -33,7 +33,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!getIsHold())
 	{
-		vy += KOOPAS_GRAVITY * dt;
+		vy += ay * dt;
 		if (state == KOOPAS_STATE_WALKING && level == SMART_KOOPAS)
 		{
 			if (vx > 0)NavBox->SetPosition(x + KOOPAS_BBOX_WIDTH, y);
@@ -82,6 +82,8 @@ void Koopas::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		OnCollisionWithQuestionBrick(e);
 	else if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	else if (dynamic_cast<Koopas*>(e->obj))
+		OnCollisionWithKoopas(e);
 
 }
 
@@ -106,6 +108,15 @@ void Koopas::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			if (goomba->GetState() != GOOMBA_STATE_DIEBYSHELL)
 				goomba->SetState(GOOMBA_STATE_DIEBYSHELL);
 		}
+	}
+}
+
+void Koopas::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
+{
+	Koopas* koopas = dynamic_cast<Koopas*>(e->obj);
+	if (koopas->state == KOOPAS_STATE_INSHELL_ATTACK) {
+		if (e->nx || e->ny)
+			SetState(KOOPAS_STATE_DIE_BY_SHELL);
 	}
 }
 

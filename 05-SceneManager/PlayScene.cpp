@@ -349,8 +349,14 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	if (cx + game->GetBackBufferWidth() >= 2816)cx = 2816 - game->GetBackBufferWidth();
-	if (player->x <= MARIO_BIG_BBOX_WIDTH / 2)player->x = MARIO_BIG_BBOX_WIDTH / 2;
+	if (cx + game->GetBackBufferWidth() >= 16 * 174)
+	{
+		cx = 16 * 174 - game->GetBackBufferWidth();
+	}
+	if (player->x <= MARIO_BIG_BBOX_WIDTH / 2)
+	{
+		player->x = MARIO_BIG_BBOX_WIDTH / 2;
+	}
 
 	if (Camera::GetInstance()->IsFollowingMario)
 	{

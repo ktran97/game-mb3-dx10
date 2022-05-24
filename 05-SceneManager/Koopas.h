@@ -28,7 +28,7 @@
 
 #define KOOPAS_BBOX_WIDTH 16
 #define KOOPAS_BBOX_HEIGHT 28
-#define KOOPAS_BBOX_HIDDEN 16
+#define KOOPAS_BBOX_HIDDEN 14
 
 
 class Koopas : public CGameObject
@@ -54,6 +54,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt);
 	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 
 	void GetKoopasAni(int& IdAni);
 	void GetRedKoopasAni(int& IdAni);

@@ -122,6 +122,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		float koopasX, koopasY;
 
+
 		if (level == MARIO_LEVEL_SMALL)
 			koopasY = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 		else
@@ -136,14 +137,30 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else
 				koopasX = x + KOOPAS_BBOX_WIDTH / 4;
 		}
+
 		if (nx > 0)
 			koopasHold->SetPosition(koopasX + MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2, koopasY);
 		else
 			koopasHold->SetPosition(koopasX - MARIO_BIG_BBOX_WIDTH, koopasY);
 		if (koopasHold->GetState() == KOOPAS_STATE_WALKING)
 		{
-			koopasHold->y -= (KOOPAS_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT) / 2;
+			koopasHold->y -= ((KOOPAS_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT) / 2);
 			isHoldingKoopas = false;
+			//HANDLE MARIO IS ATTACKED WHEN HOLDING KOOPAS SHELL
+			if (level > MARIO_LEVEL_BIG)
+			{
+				StartUntouchable();
+				level = MARIO_LEVEL_BIG;
+			}
+			else if (level == MARIO_LEVEL_BIG)
+			{
+				StartUntouchable();
+				level = MARIO_LEVEL_SMALL;
+			}
+			else if (level == MARIO_LEVEL_SMALL)
+			{
+				SetState(MARIO_STATE_DIE);
+			}
 		}
 	}
 
@@ -247,7 +264,7 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 	QuestionBrick* QBrick = dynamic_cast<QuestionBrick*>(e->obj);
 
 	//Check qbrick
-	if (!QBrick->innitItemSuccess) {
+	if (!QBrick->innitItemSuccess && QBrick->GetState() != QUESTION_BRICK_STATE_START_INNIT) {
 		if (e->ny > 0)
 		{
 			QBrick->SetState(QUESTION_BRICK_STATE_START_INNIT);
@@ -282,6 +299,12 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 					break;
 				}
 			}
+			else {
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				koopas->SetSpeed(0, 0);
+				koopas->level = NORMAL_KOOPAS;
+				koopas->SetState(KOOPAS_STATE_WALKING);
+			}
 		}
 	}
 	else // hit by Koopas
@@ -302,22 +325,22 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 					SetState(MARIO_STATE_DIE);
 				}
 			}
-		}
-		if (e->nx != 0 && !koopas->IsAttack)
-		{
-			if (abs(ax) != MARIO_ACCEL_RUN_X)
+			if (e->nx != 0 && !koopas->IsAttack)
 			{
-				koopas->nx = nx;
-				SetState(MARIO_STATE_KICKKOOPAS);
-				koopas->SetState(KOOPAS_STATE_INSHELL_ATTACK);
-			}
-			else if (abs(ax) == MARIO_ACCEL_RUN_X)
-			{
-				koopas->SetSpeed(0, 0);
-				isHoldingKoopas = true;
-				koopas->setIsHold(true);
-				koopasHold = dynamic_cast<Koopas*>(e->obj);
-				DebugOut(L">>>mario is holding koopas >>> \n");
+				if (abs(ax) != MARIO_ACCEL_RUN_X)
+				{
+					koopas->nx = nx;
+					SetState(MARIO_STATE_KICKKOOPAS);
+					koopas->SetState(KOOPAS_STATE_INSHELL_ATTACK);
+				}
+				else if (abs(ax) == MARIO_ACCEL_RUN_X)
+				{
+					koopas->SetSpeed(0, 0);
+					isHoldingKoopas = true;
+					koopas->setIsHold(true);
+					koopasHold = dynamic_cast<Koopas*>(e->obj);
+					DebugOut(L">>>mario is holding koopas >>> \n");
+				}
 			}
 		}
 	}
@@ -327,16 +350,20 @@ void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e)
 {
 	if (dynamic_cast<Mushroom*>(e->obj))
 	{
-		DebugOut(L">>> Mario conllison with mushroom >>> \n");
+		DebugOut(L">>> mario conllison with mushroom >>> \n");
+		if (level == MARIO_LEVEL_SMALL)
+			y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 		level = MARIO_LEVEL_BIG;
-		y -= 16;
+		DebugOut(L">>> small mario transform into BIG MARIO>>> \n");
 		e->obj->Delete();
 	}
 	else if (dynamic_cast<Leaf*>(e->obj))
 	{
 		DebugOut(L">>> Mario conllison with leaf >>> \n");
+		if (level == MARIO_LEVEL_SMALL)
+			y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 		level = MARIO_LEVEL_RACOON;
-		y -= 16;
+		DebugOut(L">>> mario transfer into racoon >>> \n");
 		e->obj->Delete();
 	}
 }
@@ -1011,17 +1038,17 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	{
 		if (isSitting)
 		{
-			left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
-			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
-			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
-			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
+			left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2 - 2;
+			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2 - 2;
+			right = left + MARIO_BIG_SITTING_BBOX_WIDTH + 2;
+			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT + 2;
 		}
 		else
 		{
 			if (nx > 0)
-				left = x - MARIO_BIG_BBOX_WIDTH / 2 + 1;
+				left = x - MARIO_BIG_BBOX_WIDTH / 2 + 4;
 			else
-				left = x - MARIO_BIG_BBOX_WIDTH / 2 + 2;
+				left = x - MARIO_BIG_BBOX_WIDTH / 2 - 2;
 			right = left + MARIO_BIG_BBOX_WIDTH - 2;
 			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
