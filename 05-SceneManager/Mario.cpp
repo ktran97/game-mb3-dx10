@@ -918,8 +918,7 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_RELEASE_JUMP:
-		//if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
-		//if (vy < 0 && !isFlying) vy = 0;
+		if (vy < 0 && !isFlying) vy = 0;
 		ay = MARIO_GRAVITY;
 		break;
 	case MARIO_STATE_SIT:
@@ -942,19 +941,8 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_IDLE:
-
 		if (vx != 0) {
-			ax = -nx * MARIO_ACCEL_SLOWING_DOWN_X; // TODO: To constant - the slowing down speed
-			/*if (nx == 1 && vx < 0) {
-				vx = 0;
-				maxVx = 0;
-				ax = 0;
-			}
-			if (nx == -1 && vx > 0) {
-				vx = 0;
-				maxVx = 0;
-				ax = 0;
-			}*/
+			ax = -nx * MARIO_ACCEL_SLOWING_DOWN_X;
 		}
 		break;
 	case MARIO_STATE_DIE:
