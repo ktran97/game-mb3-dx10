@@ -289,6 +289,7 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 
 	void HandleMarioIsAttacked();
+	void HandleMarioIsFlying(DWORD dt);
 
 	bool CheckMarioIsOnPlatform()
 	{

@@ -47,11 +47,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else { Camera::GetInstance()->cam_y = 240; }
 
-		if (GetTickCount64() - FlyingTime >= 3000)
-		{
-			isFlying = false;
-			if (!isOnPlatform)SetState(MARIO_STATE_RELEASE_JUMP);
-		}
+		HandleMarioIsFlying(dt);
 	}
 
 	if (Camera::GetInstance()->cam_y < 240 && !isFlying)
@@ -488,27 +484,69 @@ int CMario::GetAniIdRacoon()
 	int aniId = -1;
 	if (!isOnPlatform)
 	{
-		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		if (vy >= 0)
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_RUN_RIGHT;
+			if (!isHoldingKoopas)
+			{
+				if (!isSitting)
+				{
+					if (nx >= 0)
+						aniId = ID_ANI_RACOON_FALLING_RIGHT;
+					else
+						aniId = ID_ANI_RACOON_FALLING_LEFT;
+				}
+				else {
+					if (nx > 0)
+						aniId = ID_ANI_RACOON_SITTING_RIGHT;
+					else
+						aniId = ID_ANI_RACOON_SITTING_LEFT;
+				}
+			}
 			else
-				aniId = ID_ANI_MARIO_JUMP_RUN_LEFT;
-		}
-		else
-		{
-			if (vy >= 0)
 			{
 				if (nx >= 0)
-					aniId = ID_ANI_RACOON_FALLING_RIGHT;
+					aniId = ID_ANI_RACOON_HOLDKOOPAS_JUMP_RIGHT;
 				else
-					aniId = ID_ANI_RACOON_FALLING_LEFT;
+					aniId = ID_ANI_RACOON_HOLDKOOPAS_JUMP_LEFT;
 			}
-			else {
+		}
+		else {
+			if (!isHoldingKoopas)
+			{
+				if (!isSitting)
+				{
+
+					if (nx >= 0)
+						aniId = ID_ANI_RACOON_JUMP_WALK_RIGHT;
+					else
+						aniId = ID_ANI_RACOON_JUMP_WALK_LEFT;
+				}
+				else {
+					if (nx > 0)
+						aniId = ID_ANI_RACOON_SITTING_RIGHT;
+					else
+						aniId = ID_ANI_RACOON_SITTING_LEFT;
+				}
+			}
+			else
+			{
 				if (nx >= 0)
-					aniId = ID_ANI_RACOON_JUMP_WALK_RIGHT;
+					aniId = ID_ANI_RACOON_HOLDKOOPAS_JUMP_RIGHT;
 				else
-					aniId = ID_ANI_RACOON_JUMP_WALK_LEFT;
+					aniId = ID_ANI_RACOON_HOLDKOOPAS_JUMP_LEFT;
+			}
+		}
+		if (isFlying)
+		{
+			if (vy > 0)
+			{
+				if (nx > 0)aniId = ID_ANI_RACOON_FALLING_FLYING_RIGHT;
+				else aniId = ID_ANI_RACOON_FALLING_FLYING_LEFT;
+			}
+			else if (vy < 0)
+			{
+				if (nx > 0)aniId = ID_ANI_RACOON_FLYING_RIGHT;
+				else aniId = ID_ANI_RACOON_FLYING_LEFT;
 			}
 		}
 	}
@@ -1065,5 +1103,14 @@ void CMario::HandleMarioIsAttacked()
 	{
 		SetState(MARIO_STATE_DIE);
 		DebugOut(L">>>mario die>>> \n");
+	}
+}
+
+void CMario::HandleMarioIsFlying(DWORD dt)
+{
+	if (GetTickCount64() - FlyingTime >= 3000)
+	{
+		isFlying = false;
+		if (!isOnPlatform)SetState(MARIO_STATE_RELEASE_JUMP);
 	}
 }
