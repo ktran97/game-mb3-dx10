@@ -15,6 +15,7 @@ void Koopas::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	if (!getIsHold())
 	{
 		if (state != KOOPAS_STATE_DIE_BY_SHELL)
+		{
 			if (!InShell) {
 				top = y - KOOPAS_BBOX_HEIGHT / 2;
 				bottom = top + KOOPAS_BBOX_HEIGHT - 2;
@@ -23,10 +24,10 @@ void Koopas::GetBoundingBox(float& left, float& top, float& right, float& bottom
 				top = y - KOOPAS_BBOX_HIDDEN / 2;
 				bottom = top + KOOPAS_BBOX_HIDDEN;
 			}
-		left = x - KOOPAS_BBOX_WIDTH / 2;
-		right = left + KOOPAS_BBOX_WIDTH;
+			left = x - KOOPAS_BBOX_WIDTH / 2;
+			right = left + KOOPAS_BBOX_WIDTH;
+		}
 	}
-
 }
 
 void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -36,8 +37,8 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += ay * dt;
 		if (state == KOOPAS_STATE_WALKING && level == SMART_KOOPAS)
 		{
-			if (vx > 0)NavBox->SetPosition(x + KOOPAS_BBOX_WIDTH, y);
-			else NavBox->SetPosition(x - KOOPAS_BBOX_WIDTH, y);
+			if (vx > 0)NavBox->SetPosition(x + KOOPAS_BBOX_WIDTH / 2 + NAVIGATION_BBOX_WIDTH / 2, y);
+			else NavBox->SetPosition(x - KOOPAS_BBOX_WIDTH / 2 - NAVIGATION_BBOX_WIDTH / 2, y);
 			NavBox->Update(dt, coObjects);
 			float navX, navY;
 			NavBox->GetPosition(navX, navY);
@@ -48,14 +49,13 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 }
 
-
-
 void Koopas::Render()
 {
 	int aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
 	if (level == NORMAL_KOOPAS)GetKoopasAni(aniId);
 	else if (level == SMART_KOOPAS)GetRedKoopasAni(aniId);
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	if (CAnimations::GetInstance()->Get(aniId))
+		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 	NavBox->Render();
 }
@@ -84,7 +84,6 @@ void Koopas::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<Koopas*>(e->obj))
 		OnCollisionWithKoopas(e);
-
 }
 
 void Koopas::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
@@ -99,14 +98,13 @@ void Koopas::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 
 void Koopas::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
+	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 	if (state == KOOPAS_STATE_INSHELL_ATTACK)
 	{
-		if (e->nx)
+		if (e->nx && goomba->GetState() != GOOMBA_STATE_DIEBYSHELL)
 		{
-			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 			goomba->nx = nx;
-			if (goomba->GetState() != GOOMBA_STATE_DIEBYSHELL)
-				goomba->SetState(GOOMBA_STATE_DIEBYSHELL);
+			goomba->SetState(GOOMBA_STATE_DIEBYSHELL);
 		}
 	}
 }
@@ -114,9 +112,11 @@ void Koopas::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void Koopas::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
 	Koopas* koopas = dynamic_cast<Koopas*>(e->obj);
-	if (koopas->state == KOOPAS_STATE_INSHELL_ATTACK) {
+	if (state == KOOPAS_STATE_INSHELL_ATTACK) {
 		if (e->nx || e->ny)
-			SetState(KOOPAS_STATE_DIE_BY_SHELL);
+		{
+			koopas->SetState(KOOPAS_STATE_DIE_BY_SHELL);
+		}
 	}
 }
 
@@ -129,7 +129,6 @@ void Koopas::GetKoopasAni(int& IdAni)
 	}
 	else if (state == KOOPAS_STATE_INSHELL || state == KOOPAS_STATE_DIE_BY_SHELL)IdAni = ID_ANI_KOOPAS_INSHELL;
 	else if (state == KOOPAS_STATE_INSHELL_ATTACK)IdAni = ID_ANI_KOOPAS_INSHELL_ATTACK;
-
 }
 
 void Koopas::GetRedKoopasAni(int& IdAni)

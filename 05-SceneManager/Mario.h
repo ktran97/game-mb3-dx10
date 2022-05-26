@@ -105,6 +105,9 @@
 #define ID_ANI_MARIO_HOLDKOOPAS_JUMP_RIGHT	1706
 #define ID_ANI_MARIO_HOLDKOOPAS_JUMP_LEFT	1707
 
+#define ID_ANI_MARIO_FALLING_RIGHT	1708
+#define ID_ANI_MARIO_FALLING_LEFT	1709
+
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
@@ -166,6 +169,9 @@
 
 #define ID_ANI_RACOON_ATTACK_RIGHT	1918
 #define ID_ANI_RACOON_ATTACK_LEFT	1919
+
+#define ID_ANI_RACOON_FALLING_FLYING_RIGHT 1920
+#define ID_ANI_RACOON_FALLING_FLYING_LEFT 1921
 
 #define ID_ANI_RACOON_KICKKOOPAS_RIGHT	1923
 #define ID_ANI_RACOON_KICKKOOPAS_LEFT	1924
@@ -281,6 +287,8 @@ public:
 	void IncreaseSpeedStack();
 	void DecreaseSpeedStack();
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
+
+	void HandleMarioIsAttacked();
 
 	bool CheckMarioIsOnPlatform()
 	{

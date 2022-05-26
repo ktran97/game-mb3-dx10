@@ -229,16 +229,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
-				if (level > MARIO_LEVEL_SMALL)
-				{
-					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
-				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
-				}
+				HandleMarioIsAttacked();
 			}
 		}
 	}
@@ -281,6 +272,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		{
 			if (koopas->level < PARA_KOOPAS)
 			{
+
 				switch (koopas->GetState())
 				{
 				case KOOPAS_STATE_WALKING:
@@ -288,6 +280,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 					vy = -MARIO_JUMP_DEFLECT_SPEED;
 					break;
 				case KOOPAS_STATE_INSHELL:
+					koopas->nx = nx;
 					koopas->SetState(KOOPAS_STATE_INSHELL_ATTACK);
 					vy = -MARIO_JUMP_DEFLECT_SPEED;
 					break;
@@ -313,34 +306,24 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		{
 			if (koopas->IsAttack)
 			{
-				DebugOut(L">>> Mario conllision with koopas >>> \n");
-				if (level > MARIO_LEVEL_SMALL)
-				{
-					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
-				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
-				}
+				HandleMarioIsAttacked();
 			}
-			if (e->nx != 0 && !koopas->IsAttack)
+		}
+		if (e->nx != 0 && !koopas->IsAttack)
+		{
+			if (abs(ax) != MARIO_ACCEL_RUN_X)
 			{
-				if (abs(ax) != MARIO_ACCEL_RUN_X)
-				{
-					koopas->nx = nx;
-					SetState(MARIO_STATE_KICKKOOPAS);
-					koopas->SetState(KOOPAS_STATE_INSHELL_ATTACK);
-				}
-				else if (abs(ax) == MARIO_ACCEL_RUN_X)
-				{
-					koopas->SetSpeed(0, 0);
-					isHoldingKoopas = true;
-					koopas->setIsHold(true);
-					koopasHold = dynamic_cast<Koopas*>(e->obj);
-					DebugOut(L">>>mario is holding koopas >>> \n");
-				}
+				koopas->nx = nx;
+				SetState(MARIO_STATE_KICKKOOPAS);
+				koopas->SetState(KOOPAS_STATE_INSHELL_ATTACK);
+			}
+			else if (abs(ax) == MARIO_ACCEL_RUN_X)
+			{
+				koopas->SetSpeed(0, 0);
+				isHoldingKoopas = true;
+				koopas->setIsHold(true);
+				koopasHold = dynamic_cast<Koopas*>(e->obj);
+				DebugOut(L">>>mario is holding koopas >>> \n");
 			}
 		}
 	}
@@ -372,21 +355,9 @@ void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 {
 	if (untouchable == 0)
 	{
-		if (level > MARIO_LEVEL_SMALL)
-		{
-			level = MARIO_LEVEL_SMALL;
-			StartUntouchable();
-		}
-		else
-		{
-			DebugOut(L">>> Mario DIE >>> \n");
-			SetState(MARIO_STATE_DIE);
-		}
+		HandleMarioIsAttacked();
 	}
 }
-
-
-
 
 //
 // Get animation ID for small Mario
@@ -1075,5 +1046,24 @@ void CMario::DecreaseSpeedStack() {
 	{
 		SpeedStackTime = 0;
 		speedStack--;
+	}
+}
+
+void CMario::HandleMarioIsAttacked()
+{
+	if (level > MARIO_LEVEL_BIG)
+	{
+		StartUntouchable();
+		level = MARIO_LEVEL_BIG;
+	}
+	else if (level == MARIO_LEVEL_BIG)
+	{
+		StartUntouchable();
+		level = MARIO_LEVEL_SMALL;
+	}
+	else if (level == MARIO_LEVEL_SMALL)
+	{
+		SetState(MARIO_STATE_DIE);
+		DebugOut(L">>>mario die>>> \n");
 	}
 }
