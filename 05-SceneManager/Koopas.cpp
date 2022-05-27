@@ -47,6 +47,9 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		CCollision::GetInstance()->Process(this, dt, coObjects);
 	}
+	else {
+		SetState(KOOPAS_STATE_INSHELL);
+	}
 }
 
 void Koopas::Render()

@@ -298,27 +298,18 @@ void CPlayScene::Update(DWORD dt)
 
 	vector<LPGAMEOBJECT> coObjects;
 	vector<LPGAMEOBJECT> Mario;
+
 	for (size_t i = 1; i < objects.size(); i++)
 	{
-		if (objects[i] != NULL)
+		if (dynamic_cast<QuestionBrick*>(objects[i]))
 		{
-			if (dynamic_cast<QuestionBrick*>(objects[i]))
-			{
-				QuestionBrick* Qbrick = dynamic_cast<QuestionBrick*>(objects[i]);
-				if (!Qbrick->innitItemSuccess)
-				{
-					AddItemToQBrick(Qbrick, i);
-				}
-			}
+			QuestionBrick* QBrick = dynamic_cast<QuestionBrick*>(objects[i]);
+			if (!QBrick->innitItemSuccess)
+				AddItemToQBrick(QBrick, i);
 		}
 		coObjects.push_back(objects[i]);
 	}
 	Mario.push_back(objects[0]);
-
-	/*for (size_t i = 0; i < FirePiranhaPlants.size(); i++) {
-		FirePiranhaPlants[i]->GetEnemyPos(player->x, player->y);
-		FirePiranhaPlants[i]->Update(dt, &Mario);
-	}*/
 
 	//Loop into objects -> render Object
 	for (size_t i = 0; i < objects.size(); i++)
@@ -329,10 +320,9 @@ void CPlayScene::Update(DWORD dt)
 			Fplant->GetEnemyPos(player->x, player->y);
 			objects[i]->Update(dt, &Mario);
 		}
-		//CHECK IN CAMERA -> LOAD OBJECT
-		else if (Camera::GetInstance()->IsInCam(objects[i]->x, objects[i]->y) || dynamic_cast<CMario*>(objects[i]))
-		{
-			objects[i]->Update(dt, &coObjects);
+		else {
+			if (Camera::GetInstance()->IsInCam(objects[i]->x, objects[i]->y) || dynamic_cast<CMario*>(objects[i]))
+				objects[i]->Update(dt, &coObjects);
 		}
 	}
 
@@ -357,15 +347,10 @@ void CPlayScene::Update(DWORD dt)
 	{
 		player->x = MARIO_BIG_BBOX_WIDTH / 2;
 	}
-
-	if (Camera::GetInstance()->IsFollowingMario)
-	{
-		Camera::GetInstance()->SetCamPosX(cx);
-	}
-	else
-	{
+	if (!Camera::GetInstance()->IsFollowingMario)
 		Camera::GetInstance()->SetCamPos(cx, 240.0f /*cy*/);
-	}
+	else
+		Camera::GetInstance()->SetCamPosX(cx);
 
 	PurgeDeletedObjects();
 }
@@ -373,8 +358,13 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	map->Draw();
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+
+	for (int i = 1; i < objects.size(); i++)
+	{
+		if (!dynamic_cast<Pipe*>(objects[i]))
+			objects[i]->Render();
+	}
+	objects[0]->Render();
 }
 
 /*

@@ -3,15 +3,15 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay * dt;
-	vx += ax * dt;
+	vy += (float)ay *dt;
+	vx += (float)ax *dt;
 
 	if (abs(vx) > abs(maxVx) && state != MARIO_STATE_IDLE) vx = maxVx;
-
 	if (state == MARIO_STATE_IDLE) {
 		if (nx > 0 && vx < 0) { vx = 0; ax = 0; }
 		else if (nx < 0 && vx > 0) { vx = 0; ax = 0; }
 	}
+
 	else if (state == RACOON_STATE_IS_ATTACKED)
 	{
 		if (GetTickCount64() - effectTime > RACOON_IS_ATTACKED_TIME)
@@ -143,20 +143,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			koopasHold->y -= ((KOOPAS_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT) / 2);
 			isHoldingKoopas = false;
 			//HANDLE MARIO IS ATTACKED WHEN HOLDING KOOPAS SHELL
-			if (level > MARIO_LEVEL_BIG)
-			{
-				StartUntouchable();
-				level = MARIO_LEVEL_BIG;
-			}
-			else if (level == MARIO_LEVEL_BIG)
-			{
-				StartUntouchable();
-				level = MARIO_LEVEL_SMALL;
-			}
-			else if (level == MARIO_LEVEL_SMALL)
-			{
-				SetState(MARIO_STATE_DIE);
-			}
+			HandleMarioIsAttacked();
 		}
 	}
 
@@ -905,32 +892,47 @@ void CMario::SetState(int state)
 		nx = -1;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
-		if (isSitting) break;
+		//if (isSitting) break;
+		if (isSitting)
+		{
+			isSitting = false;
+			y -= MARIO_SIT_HEIGHT_ADJUST;
+		}
 		maxVx = MARIO_WALKING_SPEED;
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
-		if (isSitting) break;
+		//if (isSitting) break;
+		if (isSitting)
+		{
+			isSitting = false;
+			y -= MARIO_SIT_HEIGHT_ADJUST;
+		}
 		maxVx = -MARIO_WALKING_SPEED;
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
 		break;
 	case MARIO_STATE_JUMP:
-		if (isSitting) break;
+		//if (isSitting) break;
 		if (isOnPlatform)
 		{
-			if (abs(this->vx) == MARIO_RUNNING_SPEED)
+			if (abs(vx) >= MARIO_RUNNING_SPEED)
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
 		}
 		break;
+
 	case MARIO_STATE_RELEASE_JUMP:
+		//if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		if (vy < 0 && !isFlying) vy = 0;
 		ay = MARIO_GRAVITY;
 		break;
+
 	case MARIO_STATE_SIT:
+		if (this->state == MARIO_STATE_WALKING_LEFT || this->state == MARIO_STATE_WALKING_RIGHT)
+			break;
 		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
 		{
 			state = MARIO_STATE_IDLE;
@@ -951,7 +953,7 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_IDLE:
 		if (vx != 0) {
-			ax = -nx * MARIO_ACCEL_SLOWING_DOWN_X;
+			ax = -nx * (float)MARIO_ACCEL_SLOWING_DOWN_X;
 		}
 		break;
 	case MARIO_STATE_DIE:
@@ -979,7 +981,7 @@ void CMario::SetState(int state)
 		SlowFallingTime = GetTickCount64();
 		break;
 	case MARIO_STATE_FLYING:
-		vy = -0.1f;
+		vy = -MARIO_FLYING_SPEED;
 		ay = 0;
 		IsFalling = true;
 		FallingTime = GetTickCount64();

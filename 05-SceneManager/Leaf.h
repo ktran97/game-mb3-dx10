@@ -24,10 +24,10 @@ public:
 	Leaf(float x, float y);
 
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
-	void Render() override;
-	void SetState(int state) override;
+	void Render();
+	void SetState(int state);
 	void LeafMoving();
 
 	int isBlocking()

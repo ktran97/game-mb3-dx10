@@ -28,6 +28,7 @@
 
 #define MARIO_JUMP_SPEED_Y		0.4f
 #define MARIO_JUMP_RUN_SPEED_Y	0.45f
+#define MARIO_FLYING_SPEED  0.15f
 
 #define MARIO_GRAVITY			0.001f
 
@@ -277,16 +278,16 @@ public:
 		tail = new MarioTail();
 	}
 
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
-	void Render() override;
-	void SetState(int state) override;
-	void OnNoCollision(DWORD dt) override;
-	void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt) override;
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
+	void SetState(int state);
+	void OnNoCollision(DWORD dt);
+	void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt);
 
 	void SetLevel(int l);
 	void IncreaseSpeedStack();
 	void DecreaseSpeedStack();
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	void HandleMarioIsAttacked();
 	void HandleMarioIsFlying(DWORD dt);
@@ -296,12 +297,12 @@ public:
 		return isOnPlatform;
 	};
 
-	int IsCollidable() override
+	int IsCollidable()
 	{
 		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() override
+	int IsBlocking()
 	{
 		return (state != MARIO_STATE_DIE && untouchable == 0);
 	}
