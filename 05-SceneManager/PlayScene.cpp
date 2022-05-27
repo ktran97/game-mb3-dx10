@@ -358,13 +358,8 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	map->Draw();
-
-	for (int i = 1; i < objects.size(); i++)
-	{
-		if (!dynamic_cast<Pipe*>(objects[i]))
-			objects[i]->Render();
-	}
-	objects[0]->Render();
+	for (int i = 0; i < objects.size(); i++)
+		objects[i]->Render();
 }
 
 /*

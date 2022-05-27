@@ -2,10 +2,13 @@
 
 void MarioTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - TAIL_BBOX_WIDTH / 2;
-	top = y - TAIL_BBOX_HEIGHT / 2;
-	right = x + TAIL_BBOX_WIDTH;
-	bottom = y + TAIL_BBOX_HEIGHT;
+	if (IsActive)
+	{
+		left = x - TAIL_BBOX_WIDTH / 2;
+		top = y - TAIL_BBOX_HEIGHT / 2;
+		right = x + TAIL_BBOX_WIDTH;
+		bottom = y + TAIL_BBOX_HEIGHT;
+	}
 }
 
 void MarioTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -32,7 +35,12 @@ void MarioTail::Render()
 void MarioTail::OnCollisionWithGoomba(LPGAMEOBJECT& obj)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
-	goomba->SetState(GOOMBA_STATE_DIEBYSHELL);
+	if (goomba->GetState() != GOOMBA_STATE_DIEBYSHELL)
+	{
+		goomba->nx = nx;
+		goomba->SetState(GOOMBA_STATE_DIEBYSHELL);
+	}
+	IsActive = false;
 }
 
 void MarioTail::OnCollisionWithQuestionBrick(LPGAMEOBJECT& obj)
@@ -41,10 +49,14 @@ void MarioTail::OnCollisionWithQuestionBrick(LPGAMEOBJECT& obj)
 	if (!qbrick->innitItemSuccess) {
 		qbrick->SetState(QUESTION_BRICK_STATE_START_INNIT);
 	}
+	IsActive = false;
 }
 
 void MarioTail::OnCollisionWithKoopas(LPGAMEOBJECT& obj)
 {
 	Koopas* koopas = dynamic_cast<Koopas*>(obj);
-	koopas->SetState(KOOPAS_STATE_DIE_BY_SHELL);
+	koopas->nx = nx;
+	if (koopas->level == PARA_KOOPAS) koopas->level = NORMAL_KOOPAS;
+	koopas->SetState(KOOPAS_STATE_ATTACKED_BY_TAIL);
+	IsActive = false;
 }

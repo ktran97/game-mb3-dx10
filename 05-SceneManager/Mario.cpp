@@ -117,8 +117,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (CheckMarioHoldKoopas())
 	{
 		float koopasX, koopasY;
-
-
 		if (level == MARIO_LEVEL_SMALL)
 			koopasY = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 		else
@@ -133,7 +131,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else
 				koopasX = x + KOOPAS_BBOX_WIDTH / 4;
 		}
-
 		if (nx > 0)
 			koopasHold->SetPosition(koopasX + MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2, koopasY);
 		else
@@ -863,7 +860,10 @@ void CMario::Render()
 	else if (level == MARIO_LEVEL_RACOON)
 		aniId = GetAniIdRacoon();
 
-	animations->Get(aniId)->Render(x, y);
+	if (animations->Get(aniId))
+	{
+		animations->Get(aniId)->Render(x, y);
+	}
 
 	RenderBoundingBox();
 
@@ -972,6 +972,7 @@ void CMario::SetState(int state)
 		{
 			IsAttack = true;
 			AttackTime = GetTickCount64();
+			tail->IsActive = true;
 		}
 		break;
 	case MARIO_STATE_SLOW_FALLING:

@@ -5,31 +5,27 @@
 #include "Koopas.h"
 
 #define TAIL_BBOX_WIDTH 8
-#define TAIL_BBOX_HEIGHT 5
+#define TAIL_BBOX_HEIGHT 3
 
 class MarioTail :
 	public CGameObject
 {
 public:
-	float ax, ay;
-	int level, goombaPhase;
-	bool IsAttack;
 
-	DWORD attackTime;
+	bool IsActive = false;
 
-	ULONGLONG die_start;
+	ULONGLONG attackTime = 0;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void SetState(int state) {};
+
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
-
 	void OnCollisionWithGoomba(LPGAMEOBJECT& obj);
 	void OnCollisionWithQuestionBrick(LPGAMEOBJECT& obj);
 	void OnCollisionWithKoopas(LPGAMEOBJECT& obj);
 	MarioTail() {};
-
 };
 
