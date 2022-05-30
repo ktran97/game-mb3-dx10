@@ -6,23 +6,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += (float)ay *dt;
 	vx += (float)ax *dt;
 
-	if (abs(vx) > abs(maxVx) && state != MARIO_STATE_IDLE) vx = maxVx;
-	if (state == MARIO_STATE_IDLE) {
-		if (nx > 0 && vx < 0) { vx = 0; ax = 0; }
-		else if (nx < 0 && vx > 0) { vx = 0; ax = 0; }
-	}
-
+	HandleMarioStateIdle();
 	HandleMarioTransformRacoon();
+	HandleMarioSlowFalling();
 
-	if (IsSlowFalling)
-	{
-		if (GetTickCount64() - SlowFallingTime >= MARIO_SLOWFALLING_TIME)
-		{
-			IsSlowFalling = false;
-			SetState(MARIO_STATE_RELEASE_JUMP);
-		}
-	}
-
+	//TODO: NEED TO FIND OUT TO MAKING CAMERA SMOOTHER
 	if (isFlying)
 	{
 		//CAMERA FOLLOW MARIO WHILE FLYING
@@ -60,84 +48,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 
-	if (abs(ax) == MARIO_ACCEL_RUN_X && abs(vx) > MARIO_WALKING_SPEED)
-	{
-		IncreaseSpeedStack();
-	}
-	else {
-		if (speedStack > 0)
-		{
-			if (!isFlying)
-			{
-				DecreaseSpeedStack();
-			}
-		}
-	}
-	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
-	{
-		untouchable_start = 0;
-		untouchable = 0;
-	}
+	HandleMarioRunning();
+	HandleMarioUntouchable();
 
 	isOnPlatform = false;
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
-	//KICK KOOPAS
-	if (IsKickKoopas)
-	{
-		if (GetTickCount64() - KickKoopasTime >= MARIO_KICK_KOOPAS_TIME)
-		{
-			IsKickKoopas = false;
-		}
-	}
-
-	//ATTACK
-	if (IsAttack)
-	{
-		if (nx > 0)
-			tail->SetPosition(x + MARIO_BIG_BBOX_WIDTH / 2 + TAIL_BBOX_WIDTH / 2, y + 5);
-		else
-			tail->SetPosition(x - MARIO_BIG_BBOX_WIDTH / 2 - TAIL_BBOX_WIDTH / 2, y + 5);
-
-
-		tail->Update(dt, coObjects);
-		if (GetTickCount64() - AttackTime >= RACOON_ATTACK_TIME)
-		{
-			IsAttack = false;
-		}
-	}
-
-	//HOLDING KOOPAS
-	if (CheckMarioHoldKoopas())
-	{
-		float koopasX, koopasY;
-		if (level == MARIO_LEVEL_SMALL)
-			koopasY = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
-		else
-			koopasY = y;
-		if (level == MARIO_LEVEL_RACOON)
-		{
-			koopasX = x;
-		}
-		else {
-			if (nx > 0)
-				koopasX = x - KOOPAS_BBOX_WIDTH / 4;
-			else
-				koopasX = x + KOOPAS_BBOX_WIDTH / 4;
-		}
-		if (nx > 0)
-			koopasHold->SetPosition(koopasX + MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2, koopasY);
-		else
-			koopasHold->SetPosition(koopasX - MARIO_BIG_BBOX_WIDTH, koopasY);
-		if (koopasHold->GetState() == KOOPAS_STATE_WALKING)
-		{
-			koopasHold->y -= ((KOOPAS_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT) / 2);
-			isHoldingKoopas = false;
-			//HANDLE MARIO IS ATTACKED WHEN HOLDING KOOPAS SHELL
-			HandleMarioIsAttacked();
-		}
-	}
+	HandleMarioKickKoopas();
+	HandleRacoonAttack(dt, coObjects);
+	HandleMarioHoldingKoopas();
 
 	for (int i = 0; i < coObjects->size(); i++)
 	{
@@ -1183,6 +1102,115 @@ void CMario::HandleMarioTransformRacoon()
 				level = MARIO_LEVEL_RACOON;
 			ay = MARIO_GRAVITY;
 			SetState(MARIO_STATE_IDLE);
+		}
+	}
+}
+
+void CMario::HandleMarioSlowFalling()
+{
+	if (IsSlowFalling)
+	{
+		if (GetTickCount64() - SlowFallingTime >= MARIO_SLOWFALLING_TIME)
+		{
+			IsSlowFalling = false;
+			SetState(MARIO_STATE_RELEASE_JUMP);
+		}
+	}
+}
+
+void CMario::HandleMarioUntouchable()
+{
+	// reset untouchable timer if untouchable time has passed
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	{
+		untouchable_start = 0;
+		untouchable = 0;
+	}
+}
+
+void CMario::HandleMarioKickKoopas()
+{
+	//KICK KOOPAS
+	if (IsKickKoopas)
+	{
+		if (GetTickCount64() - KickKoopasTime >= MARIO_KICK_KOOPAS_TIME)
+		{
+			IsKickKoopas = false;
+		}
+	}
+}
+
+void CMario::HandleRacoonAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	//ATTACK
+	if (IsAttack)
+	{
+		if (nx > 0)
+			tail->SetPosition(x + MARIO_BIG_BBOX_WIDTH / 2 + TAIL_BBOX_WIDTH / 2, y + 5);
+		else
+			tail->SetPosition(x - MARIO_BIG_BBOX_WIDTH / 2 - TAIL_BBOX_WIDTH / 2, y + 5);
+		tail->Update(dt, coObjects);
+		if (GetTickCount64() - AttackTime >= RACOON_ATTACK_TIME)
+		{
+			IsAttack = false;
+		}
+	}
+}
+
+void CMario::HandleMarioHoldingKoopas()
+{
+	//HOLDING KOOPAS
+	if (CheckMarioHoldKoopas())
+	{
+		float koopasX, koopasY;
+		if (level == MARIO_LEVEL_SMALL)
+			koopasY = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+		else
+			koopasY = y;
+		if (level == MARIO_LEVEL_RACOON)
+		{
+			koopasX = x;
+		}
+		else {
+			if (nx > 0)
+				koopasX = x - KOOPAS_BBOX_WIDTH / 4;
+			else
+				koopasX = x + KOOPAS_BBOX_WIDTH / 4;
+		}
+		if (nx > 0)
+			koopasHold->SetPosition(koopasX + MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2, koopasY);
+		else
+			koopasHold->SetPosition(koopasX - MARIO_BIG_BBOX_WIDTH, koopasY);
+		if (koopasHold->GetState() == KOOPAS_STATE_WALKING)
+		{
+			koopasHold->y -= ((KOOPAS_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT) / 2);
+			isHoldingKoopas = false;
+			//HANDLE MARIO IS ATTACKED WHEN HOLDING KOOPAS SHELL
+			HandleMarioIsAttacked();
+		}
+	}
+}
+
+void CMario::HandleMarioStateIdle()
+{
+	if(abs(vx) > abs(maxVx) && state != MARIO_STATE_IDLE) vx = maxVx;
+	if (state == MARIO_STATE_IDLE) {
+		if (nx > 0 && vx < 0) { vx = 0; ax = 0; }
+		else if (nx < 0 && vx > 0) { vx = 0; ax = 0; }
+	}
+}
+
+void CMario::HandleMarioRunning()
+{
+	if (abs(ax) == MARIO_ACCEL_RUN_X && abs(vx) > MARIO_WALKING_SPEED)
+	{
+		IncreaseSpeedStack();
+	}
+	else {
+		if (speedStack > 0)
+		{
+			if (!isFlying)
+				DecreaseSpeedStack();
 		}
 	}
 }

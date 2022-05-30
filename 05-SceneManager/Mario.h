@@ -297,6 +297,13 @@ public:
 	void HandleMarioIsAttacked();
 	void HandleMarioIsFlying(DWORD dt);
 	void HandleMarioTransformRacoon();
+	void HandleMarioSlowFalling();
+	void HandleMarioUntouchable();
+	void HandleMarioKickKoopas();
+	void HandleRacoonAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void HandleMarioHoldingKoopas();
+	void HandleMarioStateIdle();
+	void HandleMarioRunning();
 
 	bool CheckMarioIsOnPlatform()
 	{
