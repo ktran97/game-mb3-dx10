@@ -12,6 +12,8 @@
 #include "Koopas.h"
 #include "Collision.h"
 #include "Leaf.h"
+#include "ButtonP.h"
+#include "BreakableBrick.h"
 
 
 #include "Animation.h"
@@ -256,6 +258,9 @@ class CMario : public CGameObject
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithItem(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlant(LPCOLLISIONEVENT e);
+	void OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithButtonP(LPCOLLISIONEVENT e);
+
 
 	int GetAniIdBig();
 	int GetAniIdSmall();

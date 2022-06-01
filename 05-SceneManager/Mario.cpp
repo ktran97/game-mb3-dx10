@@ -114,6 +114,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<FirePiranhaPlant*>(e->obj))
 		OnCollisionWithPlant(e);
+	else if (dynamic_cast<BreakableBrick*>(e->obj))
+		OnCollisionWithBreakableBrick(e);
+	else if (dynamic_cast<ButtonP*>(e->obj))
+		OnCollisionWithButtonP(e);
 	else if (dynamic_cast<Mushroom*>(e->obj) || dynamic_cast<Leaf*>(e->obj))
 		OnCollisionWithItem(e);
 }
@@ -281,6 +285,30 @@ void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 		HandleMarioIsAttacked();
 	}
 }
+
+void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
+{
+	if (e->ny > 0)
+	{
+		BreakableBrick* breakableBrick = dynamic_cast<BreakableBrick*>(e->obj);
+		if (breakableBrick->haveButton && !breakableBrick->buttonCreated)
+		{
+			breakableBrick->SetState(BREAKABLE_BRICK_STATE_CREATE_BUTTON);
+		}
+		else if (!breakableBrick->haveButton) {
+			e->obj->Delete();
+		}
+	}
+}
+
+void CMario::OnCollisionWithButtonP(LPCOLLISIONEVENT e)
+{
+	if (e->ny < 0 && !ButtonP::GetInstance()->isPushed)
+	{
+		ButtonP::GetInstance()->SetState(BUTTON_P_STATE_PUSHED);
+	}
+}
+
 
 //
 // Get animation ID for small Mario

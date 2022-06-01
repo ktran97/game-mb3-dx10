@@ -193,11 +193,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
-	case OBJECT_TYPE_BREAKBLEBRICK:
-	{
+	case OBJECT_TYPE_BREAKBLEBRICK: {
 		bool HaveButton = false;
 		int Item = atoi(tokens[3].c_str());
-
+		if (Item == 1)
+		{
+			HaveButton = true;
+			ButtonP* buttonP = ButtonP::GetInstance();
+			objects.push_back(buttonP);
+		}
 		obj = new BreakableBrick(x, y, HaveButton);
 		break;
 	}

@@ -30,7 +30,13 @@ void BreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	if (!isBreakDown) {
-		//TODO: NEED TO CHECK IF BREAKABLEBRICK HAVE BUTTON P OR NOT -> setState -> breakableBrick state transform coin
+		if (!haveButton)
+		{
+			if (ButtonP::GetInstance()->isPushed && !InitCoin)
+			{
+				SetState(BREAKABLE_BRICK_STATE_TRANSFORMS_COIN);
+			}
+		}
 		
 		if (state == BREAKABLE_BRICK_STATE_TRANSFORMS_COIN)
 		{
@@ -100,7 +106,14 @@ void BreakableBrick::SetState(int state)
 	case BREAKABLE_BRICK_STATE_BREAK_DOWN:
 		isBreakDown = true;
 		break;
-	
+
+	case BREAKABLE_BRICK_STATE_CREATE_BUTTON:
+		buttonCreated = true;
+		vy = -BREAKBLE_BRICK_VY;
+		ButtonP::GetInstance()->SetPosition(x, y - BRICK_BBOX_HEIGHT);
+		ButtonP::GetInstance()->isCreated = true;
+		break;
+
 	case COIN_STATE_TRANSFORMS_BRICK:
 		objType = OBJECT_TYPE_BREAKABLE_BRICK;
 		isBlocking = 1;

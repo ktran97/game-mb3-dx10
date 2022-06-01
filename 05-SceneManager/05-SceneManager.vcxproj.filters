@@ -147,6 +147,9 @@
     <ClCompile Include="BreakableBrickEffect.cpp">
       <Filter>bricks</Filter>
     </ClCompile>
+    <ClCompile Include="ButtonP.cpp">
+      <Filter>items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetIDs.h">
@@ -259,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="BreakableBrickEffect.h">
       <Filter>bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonP.h">
+      <Filter>items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

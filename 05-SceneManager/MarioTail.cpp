@@ -23,6 +23,8 @@ void MarioTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				OnCollisionWithQuestionBrick(coObjects->at(i));
 			else if (dynamic_cast<Koopas*>(coObjects->at(i)))
 				OnCollisionWithKoopas(coObjects->at(i));
+			else if (coObjects->at(i)->objType == OBJECT_TYPE_BREAKABLE_BRICK)
+				OnCollisionWithBreakableBrick(coObjects->at(i));
 		}
 	}
 }
@@ -58,5 +60,18 @@ void MarioTail::OnCollisionWithKoopas(LPGAMEOBJECT& obj)
 	koopas->nx = nx;
 	if (koopas->level == PARA_KOOPAS) koopas->level = NORMAL_KOOPAS;
 	koopas->SetState(KOOPAS_STATE_ATTACKED_BY_TAIL);
+	IsActive = false;
+}
+
+void MarioTail::OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj)
+{
+	BreakableBrick* breakableBrick = dynamic_cast<BreakableBrick*>(obj);
+	if (breakableBrick->haveButton && !breakableBrick->buttonCreated)
+	{
+		breakableBrick->SetState(BREAKABLE_BRICK_STATE_CREATE_BUTTON);
+	}
+	else if (!breakableBrick->haveButton) {
+		breakableBrick->SetState(BREAKABLE_BRICK_STATE_BREAK_DOWN);
+	}
 	IsActive = false;
 }

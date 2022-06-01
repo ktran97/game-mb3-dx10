@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Coin.h"
 #include "BreakableBrickEffect.h"
+#include "ButtonP.h"
 #include "debug.h"
 
 #define BRICK_BBOX_WIDTH	16
