@@ -144,6 +144,9 @@
     <ClCompile Include="BreakableBrick.cpp">
       <Filter>bricks</Filter>
     </ClCompile>
+    <ClCompile Include="BreakableBrickEffect.cpp">
+      <Filter>bricks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetIDs.h">
@@ -252,6 +255,9 @@
       <Filter>keys</Filter>
     </ClInclude>
     <ClInclude Include="BreakableBrick.h">
+      <Filter>bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakableBrickEffect.h">
       <Filter>bricks</Filter>
     </ClInclude>
   </ItemGroup>

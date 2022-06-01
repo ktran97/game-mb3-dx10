@@ -3,6 +3,7 @@
 #include "NavigationBox.h"
 #include "QuestionBrick.h"
 #include "Goomba.h"
+#include "BreakableBrick.h"
 
 #define KOOPAS_GRAVITY 0.0007f
 #define KOOPAS_WALKING_SPEED 0.03f
@@ -69,6 +70,7 @@ protected:
 	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
+	void OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e);
 
 	void GetKoopasAni(int& IdAni);
 	void GetRedKoopasAni(int& IdAni);

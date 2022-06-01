@@ -9,7 +9,10 @@ void CCoin::Update(DWORD dt)
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_COIN)->Render(x, y);
+	if (coinType == SMALL_COIN)
+		animations->Get(ID_ANI_SMALL_COIN)->Render(x, y);
+	else
+		animations->Get(ID_ANI_BIG_COIN)->Render(x, y);
 
 	//RenderBoundingBox();
 }

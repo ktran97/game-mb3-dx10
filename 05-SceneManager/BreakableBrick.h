@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 #include "Coin.h"
+#include "BreakableBrickEffect.h"
+#include "debug.h"
 
 #define BRICK_BBOX_WIDTH	16
 #define BRICK_BBOX_HEIGHT	16
@@ -18,6 +20,9 @@
 #define ID_ANI_BREAKABLE_BRICK 10001
 #define ID_ANI_BREAKABLE_BRICK_IS_UP	10002
 
+#define INNIT_VX_BREAKABLE_BRICK_EFFECT	0.05
+#define INNIT_VY_BREAKABLE_BRICK_EFFECT	0.1
+
 #define BREAKBLE_BRICK_VY	0.05f
 
 class BreakableBrick :
@@ -30,6 +35,11 @@ public:
 	DWORD ChangeBackToBrickTime;
 	bool haveButton;
 	bool buttonCreated, isBreakDown;
+
+	BreakableBrickEffect* piece1;
+	BreakableBrickEffect* piece2;
+	BreakableBrickEffect* piece3;
+	BreakableBrickEffect* piece4;
 
 	BreakableBrick(float x, float y, bool HaveButton);
 	void Render();
