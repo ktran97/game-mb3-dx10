@@ -189,6 +189,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case OBJECT_TYPE_BREAKBLEBRICK:
+	{
+		bool HaveButton = false;
+		int Item = atoi(tokens[3].c_str());
+
+		obj = new BreakableBrick(x, y, HaveButton);
+		break;
+	}
 	case OBJECT_TYPE_COLORBOX:
 	{
 		int width, height;
@@ -407,16 +415,14 @@ void CPlayScene::AddItemToQBrick(LPGAMEOBJECT obj, int index) {
 				DebugOut(L">>> Mushroom up >>> \n");
 				Mushroom* mushroom = new Mushroom(BrickX, BrickY);
 				mushroom->SetState(MUSHROOM_STATE_BEING_INNITED);
-				objects[index] = mushroom;
-				objects.push_back(QBrick);
+				objects.push_back(mushroom);
 			}
 			else
 			{
 				DebugOut(L">>> Leaf up >>> \n");
 				Leaf* leaf = new Leaf(BrickX, BrickY);
 				leaf->SetState(LEAF_STATE_INNIT);
-				objects[index] = leaf;
-				objects.push_back(QBrick);
+				objects.push_back(leaf);
 			}
 		}
 		else QBrick->InitCoin = true;

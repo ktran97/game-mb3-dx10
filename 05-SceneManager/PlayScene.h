@@ -8,7 +8,7 @@
 #include "Goomba.h"
 #include "FirePiranhaPlant.h"
 #include "Leaf.h"
-
+#include "BreakableBrick.h"
 
 class CPlayScene : public CScene
 {

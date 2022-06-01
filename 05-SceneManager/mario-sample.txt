@@ -20,4 +20,6 @@ height	240
 13	textures\plant.png
 20	textures\misc.png
 30	textures\pipe.png
+40	textures\misc1.png
+
 9000	map\map.png
