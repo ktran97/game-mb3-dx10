@@ -3,8 +3,8 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += (float)ay *dt;
-	vx += (float)ax *dt;
+	vy += (float)ay * dt;
+	vx += (float)ax * dt;
 
 	HandleMarioStateIdle();
 	HandleMarioTransformRacoon();
@@ -104,7 +104,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
-	else if (dynamic_cast<CCoin*>(e->obj))
+	else if (dynamic_cast<CCoin*>(e->obj) || e->obj->objType == OBJECT_TYPE_COIN)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
@@ -296,7 +296,7 @@ void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 			breakableBrick->SetState(BREAKABLE_BRICK_STATE_CREATE_BUTTON);
 		}
 		else if (!breakableBrick->haveButton) {
-			e->obj->Delete();
+			e->obj->SetState(BREAKABLE_BRICK_STATE_BREAK_DOWN);
 		}
 	}
 }
@@ -994,7 +994,7 @@ void CMario::SetState(int state)
 		koopasHold->SetState(KOOPAS_STATE_INSHELL_ATTACK);
 		break;
 
-	//TRANSFORM
+		//TRANSFORM
 	case MARIO_STATE_TRANSFORM_RACOON:
 		effectTime = GetTickCount64();
 		vx = vy = ax = ay = 0;
@@ -1221,7 +1221,7 @@ void CMario::HandleMarioHoldingKoopas()
 
 void CMario::HandleMarioStateIdle()
 {
-	if(abs(vx) > abs(maxVx) && state != MARIO_STATE_IDLE) vx = maxVx;
+	if (abs(vx) > abs(maxVx) && state != MARIO_STATE_IDLE) vx = maxVx;
 	if (state == MARIO_STATE_IDLE) {
 		if (nx > 0 && vx < 0) { vx = 0; ax = 0; }
 		else if (nx < 0 && vx > 0) { vx = 0; ax = 0; }
