@@ -47,8 +47,8 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_0:
 			mario->SetState(MARIO_STATE_DIE);
 			break;
-		case DIK_R: // reset
-			//Reload();
+		case DIK_R: // reload
+			mario->Reload();
 			break;
 		case DIK_A:
 			mario->SetState(MARIO_STATE_ATTACK);

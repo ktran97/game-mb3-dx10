@@ -288,6 +288,13 @@ public:
 		tail = new MarioTail();
 	}
 
+	void Reload()
+	{
+		y = 240;
+		level = MARIO_LEVEL_BIG;
+		SetState(MARIO_STATE_IDLE);
+	}
+
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
