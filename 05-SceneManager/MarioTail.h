@@ -27,6 +27,7 @@ public:
 	void OnCollisionWithQuestionBrick(LPGAMEOBJECT& obj);
 	void OnCollisionWithKoopas(LPGAMEOBJECT& obj);
 	void OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj);
+	void OnCollisionWithFirePiranhaPlant(LPGAMEOBJECT& obj);
 
 	MarioTail() {};
 };

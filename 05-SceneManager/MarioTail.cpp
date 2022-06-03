@@ -25,6 +25,8 @@ void MarioTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				OnCollisionWithKoopas(coObjects->at(i));
 			else if (coObjects->at(i)->objType == OBJECT_TYPE_BREAKABLE_BRICK)
 				OnCollisionWithBreakableBrick(coObjects->at(i));
+			else if (dynamic_cast<FirePiranhaPlant*>(coObjects->at(i)))
+				OnCollisionWithFirePiranhaPlant(coObjects->at(i));
 		}
 	}
 }
@@ -73,5 +75,13 @@ void MarioTail::OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj)
 	else if (!breakableBrick->haveButton) {
 		breakableBrick->SetState(BREAKABLE_BRICK_STATE_BREAK_DOWN);
 	}
+	IsActive = false;
+}
+
+void MarioTail::OnCollisionWithFirePiranhaPlant(LPGAMEOBJECT& obj)
+{
+	FirePiranhaPlant* Fplant = dynamic_cast<FirePiranhaPlant*>(obj);
+
+	obj->Delete();
 	IsActive = false;
 }
