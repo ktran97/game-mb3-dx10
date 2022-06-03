@@ -106,6 +106,8 @@ void Koopas::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<BreakableBrick*>(e->obj))
 		OnCollisionWithBreakableBrick(e);
+	else if (dynamic_cast<FirePiranhaPlant*>(e->obj))
+		OnCollisionWithFirePiranhaPlant(e);
 }
 
 void Koopas::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
@@ -150,6 +152,18 @@ void Koopas::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 		breakBrick->SetState(BREAKABLE_BRICK_STATE_BREAK_DOWN);
 	}
 }
+
+void Koopas::OnCollisionWithFirePiranhaPlant(LPCOLLISIONEVENT e)
+{
+	FirePiranhaPlant* Fplant = dynamic_cast<FirePiranhaPlant*>(e->obj);
+
+	if (e->nx != 0 && state == KOOPAS_STATE_INSHELL_ATTACK)
+	{
+		//TODO: NEED TO ADD ANI EFFECT BEFORE DELETE FIREPIRANHAPLANT
+		e->obj->Delete();
+	}
+}
+
 
 void Koopas::GetKoopasAni(int& IdAni)
 {

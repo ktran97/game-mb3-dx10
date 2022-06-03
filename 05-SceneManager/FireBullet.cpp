@@ -39,8 +39,21 @@ void FireBullet::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 				mario->StartUntouchable();
 			}
 		}
-		else if (mario->untouchable == 0)
-			mario->SetState(MARIO_STATE_DIE);
+		else if (mario->GetMarioLevel() == MARIO_LEVEL_RACOON)
+		{
+			if (mario->untouchable == 0)
+			{
+				mario->SetState(RACOON_STATE_TRANSFORM_MARIO);
+				mario->StartUntouchable();
+			}
+		}
+		else if (mario->GetMarioLevel() == MARIO_LEVEL_SMALL)
+		{
+			if (mario->untouchable == 0)
+			{
+				mario->SetState(MARIO_STATE_IDLE);
+			}
+		}
 	}
 }
 

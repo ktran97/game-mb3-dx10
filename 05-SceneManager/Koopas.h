@@ -4,6 +4,7 @@
 #include "QuestionBrick.h"
 #include "Goomba.h"
 #include "BreakableBrick.h"
+#include "FirePiranhaPlant.h"
 
 #define KOOPAS_GRAVITY 0.0007f
 #define KOOPAS_WALKING_SPEED 0.03f
@@ -41,7 +42,7 @@
 
 #define KOOPAS_JUMP_SPEED 0.28
 
-#define KOOPAS_WAITING_REBORN_TIME	5000
+#define KOOPAS_WAITING_REBORN_TIME	10000
 
 class Koopas : public CGameObject
 {
@@ -71,6 +72,7 @@ protected:
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithFirePiranhaPlant(LPCOLLISIONEVENT e);
 
 	void GetKoopasAni(int& IdAni);
 	void GetRedKoopasAni(int& IdAni);
