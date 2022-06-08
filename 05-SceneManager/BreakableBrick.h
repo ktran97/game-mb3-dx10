@@ -4,6 +4,7 @@
 #include "BreakableBrickEffect.h"
 #include "ButtonP.h"
 #include "debug.h"
+#include "AssetIDs.h"
 
 #define BRICK_BBOX_WIDTH	16
 #define BRICK_BBOX_HEIGHT	16
@@ -15,7 +16,6 @@
 #define COIN_STATE_TRANSFORMS_BRICK	4
 
 #define OBJECT_TYPE_BREAKABLE_BRICK	30
-#define OBJECT_TYPE_COIN	31
 
 #define ID_ANI_COIN 80005
 #define ID_ANI_BREAKABLE_BRICK 10001

@@ -51,7 +51,11 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 			mario->Reload();
 			break;
 		case DIK_A:
-			mario->SetState(MARIO_STATE_ATTACK);
+			//ATK ONLY FOR RACOON
+			if (mario->GetMarioLevel() == MARIO_LEVEL_RACOON)
+			{
+				mario->SetState(MARIO_STATE_ATTACK);
+			}
 			break;
 		}
 	}
