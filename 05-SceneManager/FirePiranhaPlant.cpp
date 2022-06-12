@@ -94,25 +94,24 @@ void FirePiranhaPlant::GetAniFirePlant()
 
 void FirePiranhaPlant::GetAniGreenFirePlant()
 {
-	//REPLACE ID LATER
 	if (x > enemyX) {
 		if (y == minY) {
-			if (enemyY < minY)aniId = ID_ANI_FIRE_PLANT_ATTACK_LEFT_UP;
-			else aniId = ID_ANI_FIRE_PLANT_ATTACK_LEFT_DOWN;
+			if (enemyY < minY)aniId = ID_ANI_GREEN_FIRE_PLANT_ATTACK_LEFT_UP;
+			else aniId = ID_ANI_GREEN_FIRE_PLANT_ATTACK_LEFT_DOWN;
 		}
-		else if (enemyY < minY)aniId = ID_ANI_FIRE_PLANT_LEFT_UP;
-		else aniId = ID_ANI_FIRE_PLANT_LEFT_DOWN;
+		else if (enemyY < minY)aniId = ID_ANI_GREEN_FIRE_PLANT_LEFT_UP;
+		else aniId = ID_ANI_GREEN_FIRE_PLANT_LEFT_DOWN;
 	}
 	else {
 		if (y == minY) {
-			if (enemyY < minY)aniId = ID_ANI_FIRE_PLANT_ATTACK_RIGHT_UP;
-			else aniId = ID_ANI_FIRE_PLANT_ATTACK_RIGHT_DOWN;
+			if (enemyY < minY)aniId = ID_ANI_GREEN_FIRE_PLANT_ATTACK_RIGHT_UP;
+			else aniId = ID_ANI_GREEN_FIRE_PLANT_ATTACK_RIGHT_DOWN;
 		}
-		else if (enemyY < minY)aniId = ID_ANI_FIRE_PLANT_RIGHT_UP;
-		else aniId = ID_ANI_FIRE_PLANT_RIGHT_DOWN;
+		else if (enemyY < minY)aniId = ID_ANI_GREEN_FIRE_PLANT_RIGHT_UP;
+		else aniId = ID_ANI_GREEN_FIRE_PLANT_RIGHT_DOWN;
 	}
 
-	if (aniId == -1) aniId = ID_ANI_FIRE_PLANT_LEFT_DOWN;
+	if (aniId == -1) aniId = ID_ANI_GREEN_FIRE_PLANT_LEFT_DOWN;
 }
 
 void FirePiranhaPlant::SetState(int state)
