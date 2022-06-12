@@ -74,8 +74,16 @@ public:
 		enemyY = EnemyY;
 	}
 	FirePiranhaPlant(float x, float y, int type) :CGameObject(x, y) {
-		minY = y - FIRE_PIRANHAPLANT_UP_HEIGHT * 2 - 8;
-		maxY = y + FIRE_PIRANHAPLANT_UP_HEIGHT - 8;
+		if (type == FIRE_PLANT)
+		{
+			minY = y - FIRE_PIRANHAPLANT_UP_HEIGHT * 2 - FIRE_PIRANHAPLANT_UP_HEIGHT / 2;
+			maxY = y + FIRE_PIRANHAPLANT_UP_HEIGHT - FIRE_PIRANHAPLANT_UP_HEIGHT / 2;
+		}
+		else
+		{
+			minY = y - FIRE_PIRANHAPLANT_UP_HEIGHT * 2 - FIRE_PIRANHAPLANT_UP_HEIGHT / 4;
+			maxY = y + FIRE_PIRANHAPLANT_UP_HEIGHT - FIRE_PIRANHAPLANT_UP_HEIGHT / 2;
+		}
 		SetState(FIRE_PIRANHAPLANT_STATE_UP);
 		fireBullet = new FireBullet(x, y);
 		enemyX = enemyY = 0;
