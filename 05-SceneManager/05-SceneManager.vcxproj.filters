@@ -43,6 +43,9 @@
     <Filter Include="scene">
       <UniqueIdentifier>{5cd69922-e702-44f2-adf2-4952f0427365}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HUD">
+      <UniqueIdentifier>{275c0f4c-7296-4493-850f-73c6f466b567}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -149,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="ButtonP.cpp">
       <Filter>items</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>HUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="ButtonP.h">
       <Filter>items</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>HUD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
