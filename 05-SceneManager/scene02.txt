@@ -10,7 +10,6 @@ items.txt
 plant.txt
 pipe.txt
 brick.txt
-HUD.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

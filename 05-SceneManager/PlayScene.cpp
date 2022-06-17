@@ -43,7 +43,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 
 #define MAX_SCENE_LINE 1024
 Map* map;
-HUD* hud = NULL;
+HUD* hud = HUD::GetInstance();
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);

@@ -14,7 +14,7 @@
 #include "Leaf.h"
 #include "ButtonP.h"
 #include "BreakableBrick.h"
-
+#include "HUD.h"
 
 #include "Animation.h"
 #include "Animations.h"
@@ -245,6 +245,7 @@ class CMario : public CGameObject
 
 	MarioTail* tail;
 	Koopas* koopasHold;
+	HUD* hud = HUD::GetInstance();
 	
 	DWORD SpeedStackTime;
 

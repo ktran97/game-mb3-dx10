@@ -26,6 +26,13 @@
 class HUD
 {
 public:
+	static HUD* __instance;
+
+	static HUD* GetInstance()
+	{
+		if (__instance == NULL) __instance = new HUD();
+		return __instance;
+	}
 
 	float x, y;
 	bool marioIsFlying;
@@ -33,6 +40,6 @@ public:
 	HUD();
 	~HUD();
 	void Draw();
-	void setPos(float X, float Y);
+	void setPos(float xHUD, float yHUD);
 };
 

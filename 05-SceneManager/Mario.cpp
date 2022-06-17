@@ -81,6 +81,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
+
+	hud->speedStack = speedStack;
+	hud->marioIsFlying = isFlying;
 }
 
 void CMario::OnNoCollision(DWORD dt)
