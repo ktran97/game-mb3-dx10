@@ -156,6 +156,9 @@
     <ClCompile Include="HUD.cpp">
       <Filter>HUD</Filter>
     </ClCompile>
+    <ClCompile Include="LastItem.cpp">
+      <Filter>items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetIDs.h">
@@ -274,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="HUD.h">
       <Filter>HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="LastItem.h">
+      <Filter>items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

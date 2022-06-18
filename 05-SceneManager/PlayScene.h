@@ -3,12 +3,26 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "AssetIDs.h"
+
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
 #include "FirePiranhaPlant.h"
 #include "Leaf.h"
 #include "BreakableBrick.h"
+#include "Utils.h"
+#include "Sprites.h"
+#include "Portal.h"
+#include "Coin.h"
+#include "Platform.h"
+#include "Camera.h"
+#include "Map.h"
+#include "ColorBox.h"
+#include "Koopas.h"
+#include "Pipe.h"
+#include "HUD.h"
+#include "LastItem.h"
 
 class CPlayScene : public CScene
 {

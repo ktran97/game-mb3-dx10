@@ -25,6 +25,7 @@
 #define OBJTYPE_BUTTON_P	30
 
 #define OBJECT_TYPE_PORTAL	50
+#define OBJECT_TYPE_LAST_ITEM	99
 
 
 #pragma region MARIO 

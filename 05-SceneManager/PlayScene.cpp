@@ -1,22 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "AssetIDs.h"
-
 #include "PlayScene.h"
-#include "Utils.h"
-#include "Textures.h"
-#include "Sprites.h"
-#include "Portal.h"
-#include "Coin.h"
-#include "Platform.h"
-#include "Camera.h"
-#include "Map.h"
-#include "ColorBox.h"
-#include "Koopas.h"
-#include "Pipe.h"
-#include "FirePiranhaPlant.h"
-#include "HUD.h"
-//#include "Koopas.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -228,7 +212,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPortal(x, y, r, b, scene_id);
 	}
 	break;
-
+	case OBJECT_TYPE_LAST_ITEM:
+	{
+		obj = new LastItem(x, y);
+		break;
+	}
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
