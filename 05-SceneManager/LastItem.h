@@ -20,6 +20,8 @@ public:
 	int LastItemType;
 	bool isChosen;
 
+	DWORD ChangeItemTime;
+
 	LastItem(float x, float y);
 
 	void Render();
