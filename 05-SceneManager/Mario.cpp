@@ -123,6 +123,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		OnCollisionWithButtonP(e);
 	else if (dynamic_cast<Mushroom*>(e->obj) || dynamic_cast<Leaf*>(e->obj))
 		OnCollisionWithItem(e);
+	else if (dynamic_cast<LastItem*>(e->obj))
+		OnCollisionWithLastItem(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -310,6 +312,15 @@ void CMario::OnCollisionWithButtonP(LPCOLLISIONEVENT e)
 	{
 		ButtonP::GetInstance()->SetState(BUTTON_P_STATE_PUSHED);
 	}
+}
+
+void CMario::OnCollisionWithLastItem(LPCOLLISIONEVENT e)
+{
+	LastItem* LT = dynamic_cast<LastItem*>(e->obj);
+	if (!LT->isChosen)
+	{
+		LT->isChosen = true;
+	}	
 }
 
 

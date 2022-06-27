@@ -15,6 +15,7 @@
 #include "ButtonP.h"
 #include "BreakableBrick.h"
 #include "HUD.h"
+#include "LastItem.h"
 
 #include "Animation.h"
 #include "Animations.h"
@@ -261,6 +262,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithButtonP(LPCOLLISIONEVENT e);
+	void OnCollisionWithLastItem(LPCOLLISIONEVENT e);
 
 
 	int GetAniIdBig();

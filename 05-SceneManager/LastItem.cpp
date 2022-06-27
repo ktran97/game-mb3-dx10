@@ -36,11 +36,11 @@ void LastItem::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	if (isChosen)
 	{
-		animations->Get(ID_ANI_LAST_ITEM)->Render(x, y - 52);
+		animations->Get(ID_ANI_LAST_ITEM + LastItemType)->Render(x, y - 52);
 	}
-	else 
+	else if (!isChosen)
 	{
-		animations->Get(ID_ANI_LAST_ITEM + LastItemType)->Render(x, y);
+		animations->Get(ID_ANI_LAST_ITEM)->Render(x, y);
 	}
 }
 
