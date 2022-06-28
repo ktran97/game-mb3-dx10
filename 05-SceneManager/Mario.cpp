@@ -125,6 +125,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		OnCollisionWithItem(e);
 	else if (dynamic_cast<LastItem*>(e->obj))
 		OnCollisionWithLastItem(e);
+	else if (dynamic_cast<Pipe*>(e->obj))
+		OnCollisionWithSpecialPipe(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -322,6 +324,18 @@ void CMario::OnCollisionWithLastItem(LPCOLLISIONEVENT e)
 		LT->isChosen = true;
 	}	
 }
+
+void CMario::OnCollisionWithSpecialPipe(LPCOLLISIONEVENT e)
+{
+	Pipe* pipe = dynamic_cast<Pipe*>(e->obj);
+	if (pipe->PipeType == SPECIAL_PIPE && e->ny < 0)
+	{
+		startY = y + MARIO_BIG_BBOX_HEIGHT;
+		pipeX = pipe->x;
+		allowedEnterToHiddenMap = true;
+	}
+}
+
 
 
 //

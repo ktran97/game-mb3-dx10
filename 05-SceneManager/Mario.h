@@ -16,6 +16,7 @@
 #include "BreakableBrick.h"
 #include "HUD.h"
 #include "LastItem.h"
+#include "Pipe.h"
 
 #include "Animation.h"
 #include "Animations.h"
@@ -244,6 +245,10 @@ class CMario : public CGameObject
 	int level;
 	int coin;
 
+	float startY;
+	float pipeX;
+	bool allowedEnterToHiddenMap;
+
 	MarioTail* tail;
 	Koopas* koopasHold;
 	HUD* hud = HUD::GetInstance();
@@ -263,7 +268,7 @@ class CMario : public CGameObject
 	void OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithButtonP(LPCOLLISIONEVENT e);
 	void OnCollisionWithLastItem(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithSpecialPipe(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -360,4 +365,8 @@ public:
 		return isHoldingKoopas;
 	}
 
+	bool MarioIsAllowedEnterToHiddenMap()
+	{
+		return allowedEnterToHiddenMap;
+	}
 };

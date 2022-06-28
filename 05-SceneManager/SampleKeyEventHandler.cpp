@@ -17,8 +17,14 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		switch (KeyCode)
 		{
 		case DIK_DOWN:
-			if (mario->GetMarioLevel() > MARIO_LEVEL_SMALL && !mario->CheckMarioHoldKoopas())
+			if (mario->MarioIsAllowedEnterToHiddenMap())
+			{
+				DebugOut(L">>> Mario starting going to hidden map>>> \n");
+			}
+			else if (mario->GetMarioLevel() > MARIO_LEVEL_SMALL && !mario->CheckMarioHoldKoopas())
+			{
 				mario->SetState(MARIO_STATE_SIT);
+			}
 			break;
 		case DIK_S:
 			if (mario->GetMarioLevel() == MARIO_LEVEL_RACOON && mario->GetSpeedStack() == MARIO_MAX_SPEED_STACK)
