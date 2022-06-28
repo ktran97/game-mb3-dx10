@@ -46,6 +46,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			Camera::GetInstance()->IsFollowingMario = false;
 		}
 	}
+	//NEED void HandleMarioGoInHiddenMap
+	//Camera::GetInstance()->GetMarioAttributes(vx, vy, x, y, isOnPlatform, isFlying, IsInHiddenMap);
 
 
 	HandleMarioRunning();

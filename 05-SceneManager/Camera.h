@@ -1,13 +1,21 @@
 #pragma once
 #include <Windows.h>
 #include "Utils.h"
+#include "Game.h"
+
 #define SCREEN_WIDTH 266
 #define SCREEN_HEIGHT 260
 class Camera
 {
 public:
+	float mario_vx, mario_vy = 0, mario_x, mario_y;
 	float cam_x, cam_y, cam_vx, cam_vy = 0;
+
 	bool IsFollowingMario;
+	bool MarioIsFlying;
+	bool MarioIsOnPlatForm;
+	bool MarioIsInHiddenMap;
+
 public:
 	static Camera* __instance;
 
@@ -48,4 +56,6 @@ public:
 	}
 
 	void Update(DWORD dt);
+
+	void GetMarioAttributes(float vx, float vy, float x, float y, bool isonplatform, bool isflying, bool isInHiddenMap);
 };

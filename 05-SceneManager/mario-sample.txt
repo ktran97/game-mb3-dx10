@@ -25,3 +25,4 @@ height	240
 60	textures\lastItem.png
 
 9000	map\map.png
+8000 	map\hiddenMap.png
