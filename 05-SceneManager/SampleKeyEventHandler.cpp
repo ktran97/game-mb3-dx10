@@ -118,6 +118,14 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 			else
 				mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}
+		else if (game->IsKeyDown(DIK_UP)) 
+		{
+			if (mario->MarioIsAllowedEnterToHiddenMap())
+			{
+				DebugOut(L">>> Mario going out of Hidden map>>> \n");
+				mario->SetState(MARIO_STATE_GOING_OUT_OF_HIDDEN_MAP);
+			}
+		}
 		else
 			mario->SetState(MARIO_STATE_IDLE);
 	}

@@ -62,7 +62,6 @@ void Camera::Update(DWORD dt)
 				Camera::GetInstance()->SetCamPosX(cx);
 			}
 			else {
-				DebugOut(L">>>Set Camera with y = 240>>> \n");
 				Camera::GetInstance()->SetCamPos(cx, 240);
 				cam_vy = 0;
 			}

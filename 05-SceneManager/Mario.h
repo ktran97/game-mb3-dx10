@@ -44,6 +44,9 @@
 #define HIDDEN_MAP_START_POS_X	2116
 #define HIDDEN_MAP_START_POS_Y	480
 
+#define HIDDEN_MAP_OUT_POS_X	2336
+#define HIDDEN_MAP_OUT_POS_Y	400
+
 #define MARIO_MAX_SPEED_STACK	7
 
 #define MARIO_SPEEDSTACK_TIME 140
@@ -82,6 +85,7 @@
 #define MARIO_STATE_RELEASE_KOOPAS	1000
 
 #define MARIO_STATE_GOING_INSIDE_HIDDEN_MAP 950
+#define MARIO_STATE_GOING_OUT_OF_HIDDEN_MAP	951
 
 #pragma region ANIMATION_ID
 //NORMAL
@@ -258,6 +262,7 @@ class CMario : public CGameObject
 	bool allowedEnterToHiddenMap = false;
 	bool goingInsideHiddenMap = false; 
 	bool isInsideHiddenMap = false;
+	bool goingOutOfHiddenMap = false;
 
 	MarioTail* tail;
 	Koopas* koopasHold;

@@ -3,8 +3,10 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (!goingInsideHiddenMap)
+	if (!goingInsideHiddenMap && !goingOutOfHiddenMap)
 	{
+		allowedEnterToHiddenMap = false;
+
 		vy += (float)ay * dt;
 		vx += (float)ax * dt;
 
@@ -303,6 +305,12 @@ void CMario::OnCollisionWithSpecialPipe(LPCOLLISIONEVENT e)
 		startY = y + MARIO_BIG_BBOX_HEIGHT;
 		pipeX = pipe->x;
 		allowedEnterToHiddenMap = true;
+	}
+	else if (pipe->PipeType == SPECIAL_PIPE_HIDDEN_MAP_PIPE && e->ny > 0) 
+	{
+		startY = pipe->y;
+		allowedEnterToHiddenMap = true;
+		pipeX = pipe->x;
 	}
 }
 
@@ -1005,6 +1013,10 @@ void CMario::SetState(int state)
 		goingInsideHiddenMap = true;
 		SetPosition(pipeX, y);
 		break;
+	case MARIO_STATE_GOING_OUT_OF_HIDDEN_MAP:
+		goingOutOfHiddenMap = true;
+		SetPosition(pipeX, y);
+		break;
 	}
 	CGameObject::SetState(state);
 }
@@ -1266,6 +1278,22 @@ void CMario::HandleMarioGoingIntoHiddenMap(DWORD dt)
 		if (y - HIDDEN_MAP_START_POS_Y >= MARIO_BIG_BBOX_HEIGHT)
 		{
 			goingInsideHiddenMap = false;
+		}
+	}
+	else if (goingOutOfHiddenMap)
+	{
+		vy = -(float)MARIO_GO_HIDDEN_MAP_SPEED;
+		vx = 0;
+		if (startY - y >= MARIO_BIG_BBOX_HEIGHT)
+		{
+			isInsideHiddenMap = false;
+			SetPosition(HIDDEN_MAP_OUT_POS_X, HIDDEN_MAP_OUT_POS_Y);
+			startY = 0;
+			Camera::GetInstance()->GetMarioAttributes(vx, vy, x, y, isOnPlatform, isFlying, isInsideHiddenMap);
+		}
+		if (HIDDEN_MAP_OUT_POS_Y - y >= 16 * 2)
+		{
+			goingOutOfHiddenMap = false;
 		}
 	}
 	y += vy * dt;
