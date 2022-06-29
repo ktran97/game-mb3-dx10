@@ -3,89 +3,57 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += (float)ay * dt;
-	vx += (float)ax * dt;
-
-	HandleMarioStateIdle();
-	HandleMarioTransformRacoon();
-	HandleMarioSlowFalling();
-
-	//TODO: NEED TO FIND OUT TO MAKING CAMERA SMOOTHER
-	if (isFlying)
+	if (!goingInsideHiddenMap)
 	{
-		//CAMERA FOLLOW MARIO WHILE FLYING
-		Camera::GetInstance()->IsFollowingMario = true;
-		if (y - CGame::GetInstance()->GetBackBufferHeight() / 2 < 240)
+		vy += (float)ay * dt;
+		vx += (float)ax * dt;
+
+		HandleMarioStateIdle();
+		HandleMarioTransformRacoon();
+		HandleMarioSlowFalling();
+		HandleMarioRunning();
+		HandleMarioUntouchable();
+
+		isOnPlatform = false;
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+
+		HandleMarioKickKoopas();
+		HandleRacoonAttack(dt, coObjects);
+		HandleMarioHoldingKoopas();
+
+		hud->speedStack = speedStack;
+		hud->marioIsFlying = isFlying;
+
+		Camera::GetInstance()->GetMarioAttributes(vx, vy, x, y, isOnPlatform, isFlying, isInsideHiddenMap);
+
+		for (int i = 0; i < coObjects->size(); i++)
 		{
-			if (y - CGame::GetInstance()->GetBackBufferHeight() / 2 < 0)
-				Camera::GetInstance()->cam_y = 0;
-			else if (!isOnPlatform)
+			if (CCollision::GetInstance()->CheckAABB(this, coObjects->at(i)))
 			{
-				Camera::GetInstance()->cam_vy = vy;
-				Camera::GetInstance()->Update(dt);
-			}
-		}
-		else { Camera::GetInstance()->cam_y = 240; }
-
-		HandleMarioIsFlying(dt);
-	}
-
-	if (Camera::GetInstance()->cam_y < 240 && !isFlying)
-	{
-		if (y - CGame::GetInstance()->GetBackBufferHeight() / 2 < 0)
-			Camera::GetInstance()->cam_y = 0;
-		else if (!isOnPlatform)
-		{
-			Camera::GetInstance()->cam_vy = vy;
-			Camera::GetInstance()->Update(dt);
-		}
-	}
-	else {
-		if (!isFlying)
-		{
-			Camera::GetInstance()->IsFollowingMario = false;
-		}
-	}
-	//NEED void HandleMarioGoInHiddenMap
-	//Camera::GetInstance()->GetMarioAttributes(vx, vy, x, y, isOnPlatform, isFlying, IsInHiddenMap);
-
-
-	HandleMarioRunning();
-	HandleMarioUntouchable();
-
-	isOnPlatform = false;
-	CCollision::GetInstance()->Process(this, dt, coObjects);
-
-	HandleMarioKickKoopas();
-	HandleRacoonAttack(dt, coObjects);
-	HandleMarioHoldingKoopas();
-
-	for (int i = 0; i < coObjects->size(); i++)
-	{
-		if (CCollision::GetInstance()->CheckAABB(this, coObjects->at(i)))
-		{
-			if (coObjects->at(i)->isitem)
-			{
-				if (dynamic_cast<Mushroom*>(coObjects->at(i)))
+				if (coObjects->at(i)->isitem)
 				{
-					level = MARIO_LEVEL_BIG;
-					if (level == MARIO_LEVEL_SMALL)
-						y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
-					coObjects->at(i)->Delete();
-				}
-				else if (dynamic_cast<Leaf*>(coObjects->at(i)))
-				{
-					if (level == MARIO_LEVEL_SMALL)
-						y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
-					SetState(MARIO_STATE_TRANSFORM_RACOON);
-					coObjects->at(i)->Delete();
+					if (dynamic_cast<Mushroom*>(coObjects->at(i)))
+					{
+						level = MARIO_LEVEL_BIG;
+						if (level == MARIO_LEVEL_SMALL)
+							y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+						coObjects->at(i)->Delete();
+					}
+					else if (dynamic_cast<Leaf*>(coObjects->at(i)))
+					{
+						if (level == MARIO_LEVEL_SMALL)
+							y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+						SetState(MARIO_STATE_TRANSFORM_RACOON);
+						coObjects->at(i)->Delete();
+					}
 				}
 			}
 		}
 	}
-
-	hud->speedStack = speedStack;
-	hud->marioIsFlying = isFlying;
+	else
+	{
+		HandleMarioGoingIntoHiddenMap(dt);
+	}
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -324,7 +292,7 @@ void CMario::OnCollisionWithLastItem(LPCOLLISIONEVENT e)
 	if (!LT->isChosen)
 	{
 		LT->isChosen = true;
-	}	
+	}
 }
 
 void CMario::OnCollisionWithSpecialPipe(LPCOLLISIONEVENT e)
@@ -1033,8 +1001,11 @@ void CMario::SetState(int state)
 		effectTime = GetTickCount64();
 		vx = vy = ax = ay = 0;
 		break;
+	case MARIO_STATE_GOING_INSIDE_HIDDEN_MAP:
+		goingInsideHiddenMap = true;
+		SetPosition(pipeX, y);
+		break;
 	}
-
 	CGameObject::SetState(state);
 }
 
@@ -1141,10 +1112,16 @@ void CMario::HandleMarioIsAttacked()
 
 void CMario::HandleMarioIsFlying(DWORD dt)
 {
-	if (GetTickCount64() - FlyingTime >= 3000)
+	if (isFlying)
 	{
-		isFlying = false;
-		if (!isOnPlatform)SetState(MARIO_STATE_RELEASE_JUMP);
+		if (GetTickCount64() - FlyingTime >= 3000)
+		{
+			isFlying = false;
+			if (!isOnPlatform)
+			{
+				SetState(MARIO_STATE_RELEASE_JUMP);
+			}
+		}
 	}
 }
 
@@ -1271,4 +1248,25 @@ void CMario::HandleMarioRunning()
 				DecreaseSpeedStack();
 		}
 	}
+}
+
+void CMario::HandleMarioGoingIntoHiddenMap(DWORD dt)
+{
+	if (goingInsideHiddenMap)
+	{
+		vy = MARIO_GO_HIDDEN_MAP_SPEED;
+		vx = 0;
+		if (y - startY >= MARIO_BIG_BBOX_HEIGHT / 2)
+		{
+			SetPosition(HIDDEN_MAP_START_POS_X, HIDDEN_MAP_START_POS_Y);
+			startY = 1000;
+			isInsideHiddenMap = true;
+			Camera::GetInstance()->GetMarioAttributes(vx, vy, x, y, isOnPlatform, isFlying, isInsideHiddenMap);
+		}
+		if (y - HIDDEN_MAP_START_POS_Y >= MARIO_BIG_BBOX_HEIGHT)
+		{
+			goingInsideHiddenMap = false;
+		}
+	}
+	y += vy * dt;
 }

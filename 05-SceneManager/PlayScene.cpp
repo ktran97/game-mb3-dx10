@@ -299,6 +299,8 @@ void CPlayScene::Load()
 	}
 
 	f.close();
+	//INIT CAMERA POS
+	Camera::GetInstance()->SetCamPos(0, 240);
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
@@ -341,29 +343,8 @@ void CPlayScene::Update(DWORD dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
-	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
-
-	CGame* game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
-
-	if (cx < 0) cx = 0;
-
-	if (cx + game->GetBackBufferWidth() >= 16 * 174)
-	{
-		cx = 16 * 174 - game->GetBackBufferWidth();
-	}
-	if (player->x <= MARIO_BIG_BBOX_WIDTH / 2)
-	{
-		player->x = MARIO_BIG_BBOX_WIDTH / 2;
-	}
-	if (!Camera::GetInstance()->IsFollowingMario)
-		Camera::GetInstance()->SetCamPos(cx, 240.0f /*cy*/);
-	else
-		Camera::GetInstance()->SetCamPosX(cx);
-
+	//// Update camera to follow mario
+	Camera::GetInstance()->Update(dt);
 	PurgeDeletedObjects();
 }
 

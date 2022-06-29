@@ -2,9 +2,10 @@
 #include <Windows.h>
 #include "Utils.h"
 #include "Game.h"
+#include "debug.h"
 
-#define SCREEN_WIDTH 266
-#define SCREEN_HEIGHT 260
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 240
 class Camera
 {
 public:

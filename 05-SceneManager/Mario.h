@@ -39,6 +39,11 @@
 #define MARIO_JUMP_DEFLECT_SPEED  0.3f
 #define MARIO_SLOW_FALLING_SPEED  0.02f
 
+#define MARIO_GO_HIDDEN_MAP_SPEED 0.05f
+
+#define HIDDEN_MAP_START_POS_X	2116
+#define HIDDEN_MAP_START_POS_Y	480
+
 #define MARIO_MAX_SPEED_STACK	7
 
 #define MARIO_SPEEDSTACK_TIME 140
@@ -75,6 +80,8 @@
 #define RACOON_STATE_TRANSFORM_MARIO	902
 
 #define MARIO_STATE_RELEASE_KOOPAS	1000
+
+#define MARIO_STATE_GOING_INSIDE_HIDDEN_MAP 950
 
 #pragma region ANIMATION_ID
 //NORMAL
@@ -247,7 +254,10 @@ class CMario : public CGameObject
 
 	float startY;
 	float pipeX;
-	bool allowedEnterToHiddenMap;
+
+	bool allowedEnterToHiddenMap = false;
+	bool goingInsideHiddenMap = false; 
+	bool isInsideHiddenMap = false;
 
 	MarioTail* tail;
 	Koopas* koopasHold;
@@ -324,6 +334,7 @@ public:
 	void HandleMarioHoldingKoopas();
 	void HandleMarioStateIdle();
 	void HandleMarioRunning();
+	void HandleMarioGoingIntoHiddenMap(DWORD dt);
 
 	bool CheckMarioIsOnPlatform()
 	{

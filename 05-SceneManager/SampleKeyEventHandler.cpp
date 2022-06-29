@@ -20,6 +20,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 			if (mario->MarioIsAllowedEnterToHiddenMap())
 			{
 				DebugOut(L">>> Mario starting going to hidden map>>> \n");
+				mario->SetState(MARIO_STATE_GOING_INSIDE_HIDDEN_MAP);
 			}
 			else if (mario->GetMarioLevel() > MARIO_LEVEL_SMALL && !mario->CheckMarioHoldKoopas())
 			{
