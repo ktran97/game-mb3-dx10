@@ -26,6 +26,9 @@
 
 #define BREAKBLE_BRICK_VY	0.05f
 
+#define BREAKABLE_BRICK_TRANSFORM_COIN_TIME			5000
+#define BREAKABLE_BRICK_DELETE_AFTER_BREAKED_TIME	2000
+
 class BreakableBrick :
 	public CGameObject
 {
@@ -36,6 +39,8 @@ public:
 	DWORD ChangeBackToBrickTime;
 	bool haveButton;
 	bool buttonCreated, isBreakDown;
+
+	DWORD BrickBreakAbleTime;
 
 	BreakableBrickEffect* piece1;
 	BreakableBrickEffect* piece2;

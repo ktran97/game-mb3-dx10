@@ -37,19 +37,25 @@ void BreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(BREAKABLE_BRICK_STATE_TRANSFORMS_COIN);
 			}
 		}
-		
+
 		if (state == BREAKABLE_BRICK_STATE_TRANSFORMS_COIN)
 		{
-			if (GetTickCount64() - ChangeBackToBrickTime >= 5000)
+			if (GetTickCount64() - ChangeBackToBrickTime >= BREAKABLE_BRICK_TRANSFORM_COIN_TIME)
 			{
 				SetState(COIN_STATE_TRANSFORMS_BRICK);
 			}
 		}
 	}
+	else if (isBreakDown && GetTickCount64() - BrickBreakAbleTime >= BREAKABLE_BRICK_DELETE_AFTER_BREAKED_TIME && state == BREAKABLE_BRICK_STATE_BREAK_DOWN)
+	{
+		//REMOVE BREAK ABLE BREAK AFTER CONLISSION WITH KOOPAS IN SHELL ATK OR RACOON
+		DebugOut(L">>> REMOVE BREAKABLE_BRICK>>> \n");
+		Delete();
+	}
 
 	if (state == BREAKABLE_BRICK_STATE_BREAK_DOWN)
 	{
-		DebugOut(L">>> state of breakableBrick is break down (get breakableBrick down effect) >>> \n");
+		DebugOut(L">>> breakAbleBrick is breaking down into pieces>>> \n");
 		piece1->Update(dt);
 		piece2->Update(dt);
 		piece3->Update(dt);
@@ -85,7 +91,7 @@ void BreakableBrick::Render()
 		aniId = ID_ANI_COIN;
 		animations->Get(aniId)->Render(x, y);
 	}
-	else 
+	else
 	{
 		aniId = ID_ANI_BREAKABLE_BRICK;
 		if (buttonCreated)
@@ -109,6 +115,7 @@ void BreakableBrick::SetState(int state)
 
 	case BREAKABLE_BRICK_STATE_BREAK_DOWN:
 		isBreakDown = true;
+		BrickBreakAbleTime = GetTickCount64();
 		break;
 
 	case BREAKABLE_BRICK_STATE_CREATE_BUTTON:
