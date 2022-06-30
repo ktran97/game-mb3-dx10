@@ -46,6 +46,12 @@
     <Filter Include="HUD">
       <UniqueIdentifier>{275c0f4c-7296-4493-850f-73c6f466b567}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Intro">
+      <UniqueIdentifier>{68f46606-4099-4013-a224-f880add886f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="worldmap">
+      <UniqueIdentifier>{b9b8616d-3267-46ce-9bbf-ff82769dee65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -158,6 +164,12 @@
     </ClCompile>
     <ClCompile Include="LastItem.cpp">
       <Filter>items</Filter>
+    </ClCompile>
+    <ClCompile Include="Intro.cpp">
+      <Filter>Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMap.cpp">
+      <Filter>worldmap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +292,12 @@
     </ClInclude>
     <ClInclude Include="LastItem.h">
       <Filter>items</Filter>
+    </ClInclude>
+    <ClInclude Include="Intro.h">
+      <Filter>Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMap.h">
+      <Filter>worldmap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
