@@ -454,11 +454,24 @@ void CGame::_ParseSection_SCENES(string line)
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 2) return;
-	int id = atoi(tokens[0].c_str());
+	int sceneId = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
 
-	LPSCENE scene = new CPlayScene(id, path);
-	scenes[id] = scene;
+
+
+	switch (sceneId)
+	{
+	default:
+		LPSCENE scene = new CPlayScene(sceneId, path);
+		scenes[sceneId] = scene;
+		break;
+		//INTRO SCENE
+		/*case 0:
+			LPSCENE scene = new CPlayIntroScene(sceneId, path);
+			scenes[sceneId] = scene;*/
+	}
+
+
 }
 
 /*
@@ -505,14 +518,16 @@ void CGame::Load(LPCWSTR gameFile)
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
-	SwitchScene();
+	SwitchScene(current_scene);
 }
 
-void CGame::SwitchScene()
+void CGame::SwitchScene(int sceneId)
 {
-	if (next_scene < 0 || next_scene == current_scene) return;
+	//if (next_scene < 0 || next_scene == current_scene) return;
 
+	next_scene = sceneId;
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
+	
 
 	scenes[current_scene]->Unload();
 
