@@ -124,3 +124,38 @@ void CIntroScene::Unload()
 	twoPlayerArrowSprite = NULL;
 	num3Ani = NULL;
 }
+
+void CIntroSceneKeyHandler::KeyState(BYTE* states)
+{
+}
+
+void CIntroSceneKeyHandler::OnKeyDown(int KeyCode)
+{
+	switch (KeyCode)
+	{
+	case DIK_UP:
+		((CIntroScene*)scence)->SetMode(ONE_PLAYER_MODE);
+		break;
+	case DIK_DOWN:
+		((CIntroScene*)scence)->SetMode(TWO_PLAYER_MODE);
+		break;
+	case DIK_W:
+		switch (((CIntroScene*)scence)->GetMode())
+		{
+		case ONE_PLAYER_MODE:
+			CGame::GetInstance()->SwitchScene(1);
+			break;
+		case TWO_PLAYER_MODE:
+			break;
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void CIntroSceneKeyHandler::OnKeyUp(int KeyCode)
+{
+}

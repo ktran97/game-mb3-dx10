@@ -52,3 +52,14 @@ public:
 	void SetMode(int mode) { currentMode = mode; }
 	int GetMode() { return currentMode; }
 };
+
+class CIntroSceneKeyHandler : public CSceneKeyHandler
+{
+public:
+
+	virtual void KeyState(BYTE* states);
+	virtual void OnKeyDown(int KeyCode);
+	virtual void OnKeyUp(int KeyCode);
+
+	CIntroSceneKeyHandler(CScene* s) :CSceneKeyHandler(s) {};
+};

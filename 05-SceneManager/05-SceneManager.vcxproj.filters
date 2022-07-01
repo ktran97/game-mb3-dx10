@@ -46,10 +46,10 @@
     <Filter Include="HUD">
       <UniqueIdentifier>{275c0f4c-7296-4493-850f-73c6f466b567}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Intro">
+    <Filter Include="scene\Intro">
       <UniqueIdentifier>{68f46606-4099-4013-a224-f880add886f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="worldmap">
+    <Filter Include="scene\worldmap">
       <UniqueIdentifier>{b9b8616d-3267-46ce-9bbf-ff82769dee65}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -166,10 +166,10 @@
       <Filter>items</Filter>
     </ClCompile>
     <ClCompile Include="Intro.cpp">
-      <Filter>Intro</Filter>
+      <Filter>scene\Intro</Filter>
     </ClCompile>
     <ClCompile Include="WorldMap.cpp">
-      <Filter>worldmap</Filter>
+      <Filter>scene\worldmap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -294,10 +294,10 @@
       <Filter>items</Filter>
     </ClInclude>
     <ClInclude Include="Intro.h">
-      <Filter>Intro</Filter>
+      <Filter>scene\Intro</Filter>
     </ClInclude>
     <ClInclude Include="WorldMap.h">
-      <Filter>worldmap</Filter>
+      <Filter>scene\worldmap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
