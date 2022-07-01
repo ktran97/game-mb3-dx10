@@ -12,9 +12,6 @@
 
 #define MAX_SCENE_LINE 1024
 
-Map* map;
-HUD* hud = HUD::GetInstance();
-
 class CWorldMapScene : public CScene
 {
 protected:
