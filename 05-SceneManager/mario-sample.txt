@@ -4,7 +4,7 @@ width	320
 height	240
 
 #id	type	file
-# type: 0: intro, 1: play scene 
+#TYPE: 0: INTRO, 1: WORLD_MAP
 [SCENES]
 0	introScene.txt
 2	scene02.txt
