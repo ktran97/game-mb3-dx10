@@ -4,7 +4,7 @@
 CIntroScene::CIntroScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
-	/*key_handler = new CIntroSceneKeyHandler(this);*/
+	key_handler = new CIntroSceneKeyHandler(this);
 }
 
 

@@ -1,12 +1,12 @@
 [SETTINGS]
-start	2
+start	0
 width	320
 height	240
 
 #id	type	file
 # type: 0: intro, 1: play scene 
 [SCENES]
-0	intro.txt
+0	introScene.txt
 2	scene02.txt
 
 # id	file 
@@ -24,6 +24,7 @@ height	240
 50	textures\HUD.png
 52	textures\hiddenMapPipe.png
 60	textures\lastItem.png
+80	textures\intro.png
 
 9000	map\map.png
 8000 	map\hiddenMap.png
