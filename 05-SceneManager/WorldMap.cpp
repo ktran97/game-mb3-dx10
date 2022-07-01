@@ -238,3 +238,24 @@ void CWorldMapScene::PurgeDeletedObjects()
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
 }
+
+void CWorldMapSceneKeyHandler::KeyState(BYTE* states)
+{
+}
+
+void CWorldMapSceneKeyHandler::OnKeyDown(int KeyCode)
+{
+
+	switch (KeyCode)
+	{
+	case DIK_S:
+		CGame::GetInstance()->SwitchScene(SCENE_ID_MAP_1_1);
+		break;
+	default:
+		break;
+	}
+}
+
+void CWorldMapSceneKeyHandler::OnKeyUp(int KeyCode)
+{
+}
