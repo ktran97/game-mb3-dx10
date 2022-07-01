@@ -27,6 +27,10 @@
 #define OBJECT_TYPE_PORTAL	50
 #define OBJECT_TYPE_LAST_ITEM	99
 
+#define SCENE_ID_INTRO		0
+#define SCENE_ID_WORLD_MAP	1
+#define SCENE_ID_MAP_1_1	2
+
 
 #pragma region MARIO 
 

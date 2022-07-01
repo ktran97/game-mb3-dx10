@@ -8,6 +8,7 @@
 #include "Animations.h"
 #include "PlayScene.h"
 #include "Intro.h"
+#include "AssetIDs.h"
 
 CGame* CGame::__instance = NULL;
 
@@ -463,17 +464,17 @@ void CGame::_ParseSection_SCENES(string line)
 	switch (sceneId)
 	{
 	//INTRO SCENE
-	case 0:
+	case SCENE_ID_INTRO:
 		scene = new CIntroScene(sceneId, path);
 		scenes[sceneId] = scene;
 		break;
 	//WOLRD MAP
-	/*case 1:
+	/*case SCENE_ID_WORLD_MAP:
 		scene = new CWorldMapScene(sceneId, path);
 		scenes[sceneId] = scene;
 		break;*/
 	//MAP 1-1
-	case 2:
+	case SCENE_ID_MAP_1_1:
 		scene = new CPlayScene(sceneId, path);
 		scenes[sceneId] = scene;
 		break;
@@ -533,7 +534,6 @@ void CGame::SwitchScene(int sceneId)
 
 	next_scene = sceneId;
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
-
 
 	scenes[current_scene]->Unload();
 

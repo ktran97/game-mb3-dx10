@@ -2,12 +2,14 @@
 #include <iostream>
 #include <fstream>
 
+#include "AssetIDs.h"
 #include "Animation.h"
 #include "Animations.h"
 #include "Scene.h"
 #include "Textures.h"
 #include "Game.h"
 #include "debug.h"
+#include "AssetIDs.h"
 
 #define SCENE_SECTION_UNKNOWN		-1
 #define SCENE_SECTION_TEXTURES		2

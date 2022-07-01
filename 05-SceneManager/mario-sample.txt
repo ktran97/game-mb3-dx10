@@ -4,7 +4,7 @@ width	320
 height	240
 
 #id	type	file
-#TYPE: 0: INTRO, 1: WORLD_MAP
+# type: 0: intro, 1: play scene 
 [SCENES]
 0	introScene.txt
 2	scene02.txt
@@ -27,4 +27,3 @@ height	240
 80	textures\intro.png
 
 9000	map\map.png
-8000 	map\hiddenMap.png

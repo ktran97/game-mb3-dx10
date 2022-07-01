@@ -143,7 +143,7 @@ void CIntroSceneKeyHandler::OnKeyDown(int KeyCode)
 		switch (((CIntroScene*)scence)->GetMode())
 		{
 		case ONE_PLAYER_MODE:
-			CGame::GetInstance()->SwitchScene(2);
+			CGame::GetInstance()->SwitchScene(SCENE_ID_MAP_1_1);
 			break;
 		case TWO_PLAYER_MODE:
 			break;
