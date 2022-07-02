@@ -374,6 +374,7 @@ int CMario::GetAniIdSmall()
 					aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
 				}
 			}
+			isFlying = false;
 		}
 		else if (vx > 0)
 		{
@@ -568,6 +569,7 @@ int CMario::GetAniIdRacoon()
 						aniId = ID_ANI_RACOON_WALKING_LEFT;
 					}
 				}
+				isFlying = false;
 			}
 			else if (vx > 0)
 			{
@@ -760,6 +762,7 @@ int CMario::GetAniIdBig()
 						aniId = ID_ANI_MARIO_WALKING_LEFT;
 					}
 				}
+				isFlying = false;
 			}
 			else if (vx > 0)
 			{

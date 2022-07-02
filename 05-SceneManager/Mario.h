@@ -300,8 +300,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
 		isFlying = IsAttack = IsKickKoopas = false;
-		/*level = MARIO_LEVEL_SMALL;*/
-		level = MARIO_LEVEL_RACOON;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -314,7 +313,7 @@ public:
 	void Reload()
 	{
 		y = 240;
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_SMALL;
 		SetState(MARIO_STATE_IDLE);
 	}
 
