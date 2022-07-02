@@ -4,8 +4,6 @@
 #include <fstream>
 #include "AssetIDs.h"
 
-#include "PlayScene.h"
-
 #include "Utils.h"
 #include "Textures.h"
 #include "Sprites.h"
@@ -15,14 +13,18 @@
 #include "SampleKeyEventHandler.h"
 #include "HUD.h"
 #include "LastItem.h"
+#include "NodeGate.h"
+#include "MarioWM.h"
 
 using namespace std;
 
+#define SCENE_SECTION_UNKNOWN -1
+HUD* hud = HUD::GetInstance();
 CWorldMapScene::CWorldMapScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	player = NULL;
-	/*key_handler = new CWorldMapSceneKeyHandler(this);*/
+	key_handler = new CWorldMapSceneKeyHandler(this);
 }
 
 
@@ -56,6 +58,8 @@ void CWorldMapScene::_ParseSection_ANIMATIONS(string line)
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
+
+	/*DebugOut(L"--> %s\n",ToWSTR(line).c_str());*/
 
 	LPANIMATION ani = new CAnimation();
 
@@ -108,6 +112,28 @@ void CWorldMapScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
+	case OBJECT_TYPE_NODE_GATE:
+	{
+		int id = atoi(tokens[4].c_str());
+		bool left = atoi(tokens[5].c_str()) == 1 ? true : false;
+		bool top = atoi(tokens[6].c_str()) == 1 ? true : false;
+		bool right = atoi(tokens[7].c_str()) == 1 ? true : false;
+		bool bottom = atoi(tokens[8].c_str()) == 1 ? true : false;
+		obj = new CNodeGate(id, left, top, right, bottom);
+		break;
+	}
+	case OBJECT_TYPE_MARIO_IN_WORLD_MAP:
+	{
+		if (player != NULL)
+		{
+			return;
+		}
+		obj = new CMarioWM(x, y);
+		player = (CMarioWM*)obj;
+
+		DebugOut(L"[INFO] Player object created!\n");
+		break;
+	}
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -185,6 +211,8 @@ void CWorldMapScene::Render()
 	map->Draw();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+
+	hud->Draw();
 }
 
 /*
@@ -235,7 +263,7 @@ void CWorldMapScene::PurgeDeletedObjects()
 	// NOTE: remove_if will swap all deleted items to the end of the vector
 	// then simply trim the vector, this is much more efficient than deleting individual items
 	objects.erase(
-		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
+		std::remove_if(objects.begin(), objects.end(), CWorldMapScene::IsGameObjectDeleted),
 		objects.end());
 }
 

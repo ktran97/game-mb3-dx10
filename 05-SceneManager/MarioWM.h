@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "AssetIDs.h"
 
+#define ID_ANI_MARIO_IN_WORLD_MAP		100001001
+
 #define MARIO_IN_WORLD_MAP_BBOX_WIDTH	14
 #define MARIO_IN_WORLD_MAP_BBOX_HEIGHT	16
 

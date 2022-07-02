@@ -68,7 +68,7 @@ void Map::Draw()
 			{
 				float x = Tile_Width * j + 8;
 				float y = Tile_Height * i + 8;
-				if (tilemap[i][j]) { sprites->Get(tilemap[i][j] + Id)->Draw(x, y); }
+				if (tilemap[i][j]) { sprites->Get(tilemap[i][j] + Id + 1)->Draw(x, y); }
 			}
 		}
 	}

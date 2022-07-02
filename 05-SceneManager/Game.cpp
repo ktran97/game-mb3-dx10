@@ -9,6 +9,7 @@
 #include "PlayScene.h"
 #include "Intro.h"
 #include "AssetIDs.h"
+#include "WorldMap.h"
 
 CGame* CGame::__instance = NULL;
 
@@ -469,10 +470,10 @@ void CGame::_ParseSection_SCENES(string line)
 		scenes[sceneId] = scene;
 		break;
 	//WOLRD MAP
-	/*case SCENE_ID_WORLD_MAP:
+	case SCENE_ID_WORLD_MAP:
 		scene = new CWorldMapScene(sceneId, path);
 		scenes[sceneId] = scene;
-		break;*/
+		break;
 	//MAP 1-1
 	case SCENE_ID_MAP_1_1:
 		scene = new CPlayScene(sceneId, path);

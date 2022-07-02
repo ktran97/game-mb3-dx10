@@ -5,13 +5,13 @@ void CMarioWM::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 
 	x += vx * dt;
-	y += vy * dt;
+	y += vy * dt;	
 }
 
 void CMarioWM::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	int aniId = ID_SPRITE_MINI_MARIO;
+	int aniId = ID_ANI_MARIO_IN_WORLD_MAP;
 	animations->Get(aniId)->Render(x, y);
 
 	RenderBoundingBox();
