@@ -72,7 +72,7 @@ void Map::Draw()
 			}
 		}
 	}
-	else
+	else if (IsWorldMap)
 	{
 		int firstcol = (int)Camera::GetInstance()->GetCamPosX() / 16;
 		if (firstcol < 0) { firstcol = 0; }

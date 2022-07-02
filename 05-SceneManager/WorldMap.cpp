@@ -89,8 +89,7 @@ void CWorldMapScene::_ParseSection_MAP(string line) {
 	int checkWM = atoi(tokens[8].c_str());
 
 	map = new Map(IDtex, mapPath.c_str(), mapRow, mapColumn, tileRow, tileColumn, tileWidth, tileHeight);
-	if (checkWM != 0) map->IsWorldMap = true;
-	else map->IsWorldMap = false;
+	map->IsWorldMap = true;
 }
 
 
@@ -112,16 +111,7 @@ void CWorldMapScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_NODE_GATE:
-	{
-		int id = atoi(tokens[4].c_str());
-		bool left = atoi(tokens[5].c_str()) == 1 ? true : false;
-		bool top = atoi(tokens[6].c_str()) == 1 ? true : false;
-		bool right = atoi(tokens[7].c_str()) == 1 ? true : false;
-		bool bottom = atoi(tokens[8].c_str()) == 1 ? true : false;
-		obj = new CNodeGate(id, left, top, right, bottom);
-		break;
-	}
+	
 	case OBJECT_TYPE_MARIO_IN_WORLD_MAP:
 	{
 		if (player != NULL)
@@ -132,6 +122,16 @@ void CWorldMapScene::_ParseSection_OBJECTS(string line)
 		player = (CMarioWM*)obj;
 
 		DebugOut(L"[INFO] Player object created!\n");
+		break;
+	}
+	case OBJECT_TYPE_NODE_GATE:
+	{
+		int id = atoi(tokens[4].c_str());
+		bool left = atoi(tokens[5].c_str()) == 1 ? true : false;
+		bool top = atoi(tokens[6].c_str()) == 1 ? true : false;
+		bool right = atoi(tokens[7].c_str()) == 1 ? true : false;
+		bool bottom = atoi(tokens[8].c_str()) == 1 ? true : false;
+		obj = new CNodeGate(id, left, top, right, bottom);
 		break;
 	}
 	default:
@@ -211,7 +211,6 @@ void CWorldMapScene::Render()
 	map->Draw();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-
 	hud->Draw();
 }
 
@@ -273,9 +272,21 @@ void CWorldMapSceneKeyHandler::KeyState(BYTE* states)
 
 void CWorldMapSceneKeyHandler::OnKeyDown(int KeyCode)
 {
-
+	CMarioWM* mario_in_world_map = (CMarioWM*)((LPWORLDSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	switch (KeyCode)
 	{
+	case DIK_LEFT:
+		mario_in_world_map->ToLeft();
+		break;
+	case DIK_UP:
+		mario_in_world_map->ToTop();
+		break;
+	case DIK_RIGHT:
+		mario_in_world_map->ToRight();
+		break;
+	case DIK_DOWN:
+		mario_in_world_map->ToBottom();
+		break;
 	case DIK_S:
 		CGame::GetInstance()->SwitchScene(SCENE_ID_MAP_1_1);
 		break;

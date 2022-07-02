@@ -1,5 +1,5 @@
 [SETTINGS]
-start	2
+start	0
 width	320
 height	240
 
@@ -26,6 +26,7 @@ height	240
 52	textures\hiddenMapPipe.png
 60	textures\lastItem.png
 80	textures\intro.png
+999	textures\worldMap.png
 
 9000	map\map.png
 8000	map\worldMap.png

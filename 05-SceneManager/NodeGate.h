@@ -8,7 +8,7 @@ class CNodeGate : public CGameObject
 {
 	int sceneId;
 public:
-	bool allowedToLeft, allowedToTop, allowedToRight, allowedBottom;
+	bool allowedToLeft, allowedToTop, allowedToRight, allowedToBottom;
 
 	CNodeGate(int id, bool left, bool top, bool right, bool bottom);
 

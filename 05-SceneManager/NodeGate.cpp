@@ -6,7 +6,7 @@ CNodeGate::CNodeGate(int id, bool left, bool top, bool right, bool bottom)
 	allowedToLeft = left;
 	allowedToTop = top;
 	allowedToRight = right;
-	allowedBottom = bottom;
+	allowedToBottom = bottom;
 }
 
 void CNodeGate::Render()

@@ -6,7 +6,17 @@ void CMarioWM::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	x += vx * dt;
 	y += vy * dt;	
+
+	for (int i = 0; i < coObjects->size(); i++)
+	{
+		if (CCollision::GetInstance()->CheckAABB(this, coObjects->at(i)))
+		{
+			OnCollisionWithNodeGate(coObjects->at(i), coObjects);
+		}
+	}
 }
+
+
 
 void CMarioWM::Render()
 {
@@ -17,20 +27,73 @@ void CMarioWM::Render()
 	RenderBoundingBox();
 }
 
+void CMarioWM::OnCollisionWithNodeGate(CGameObject* obj, vector<LPGAMEOBJECT>* coObjs)
+{
+
+	if (dynamic_cast<CNodeGate*>(obj))
+	{
+		CNodeGate* nextNode = dynamic_cast<CNodeGate*>(obj);
+		if (currentNode == NULL)
+		{
+			currentNode = nextNode;
+		}
+		else if (currentNode == nextNode)
+		{
+			return;
+		}
+		else if (vx > 0 && x >= (nextNode->x) - 4)
+		{
+			vx = 0;
+			currentNode = nextNode;
+		}
+		else if (vx < 0 && x <= (nextNode->x) + 2)
+		{
+			vx = 0;
+			currentNode = nextNode;
+		}
+		else if (vy > 0 && y >= (nextNode->y) - 4)
+		{
+			vy = 0;
+			currentNode = nextNode;
+		}
+		else if (vy < 0 && y <= (nextNode->y) - 2)
+		{
+			vy = 0;
+			currentNode = nextNode;
+		}
+	}
+}
+
 void CMarioWM::ToLeft()
 {
+	if (currentNode->allowedToLeft && vx == 0 && vy == 0)
+	{
+		vx = -0.15f;
+	}
 }
 
 void CMarioWM::ToTop()
 {
+	if (currentNode->allowedToTop && vx == 0 && vy == 0)
+	{
+		vy = -0.15f;
+	}
 }
 
 void CMarioWM::ToRight()
 {
+	if (currentNode->allowedToRight && vx == 0 && vy == 0)
+	{
+		vx = 0.15f;
+	}
 }
 
 void CMarioWM::ToBottom()
 {
+	if (currentNode->allowedToBottom && vx == 0 && vy == 0)
+	{
+		vy = 0.15f;
+	}
 }
 
 void CMarioWM::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -40,3 +103,4 @@ void CMarioWM::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + MARIO_IN_WORLD_MAP_BBOX_WIDTH;
 	b = t + MARIO_IN_WORLD_MAP_BBOX_HEIGHT;
 }
+
