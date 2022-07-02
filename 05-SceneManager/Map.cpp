@@ -68,22 +68,27 @@ void Map::Draw()
 			{
 				float x = Tile_Width * j + 8;
 				float y = Tile_Height * i + 8;
+				if (tilemap[i][j]) { sprites->Get(tilemap[i][j] + Id)->Draw(x, y); }
+			}
+		}
+	}
+	else
+	{
+		int firstcol = (int)Camera::GetInstance()->GetCamPosX() / 16;
+		if (firstcol < 0) { firstcol = 0; }
+		int lastcol = ((int)Camera::GetInstance()->GetCamPosX() + CGame::GetInstance()->GetBackBufferWidth()) / 16 + 1;
+		int firstrow = (int)Camera::GetInstance()->GetCamPosY() / 16;
+		int lastrow = ((int)Camera::GetInstance()->GetCamPosY() + CGame::GetInstance()->GetBackBufferWidth()) / 16 + 1;
+		for (UINT i = 0; i < Num_Rows; i++)
+		{
+			for (UINT j = firstcol; j < lastcol; j++)
+			{
+				float x = Tile_Width * j + 8;
+				float y = Tile_Height * i + 8;
 				if (tilemap[i][j]) { sprites->Get(tilemap[i][j] + Id + 1)->Draw(x, y); }
 			}
 		}
 	}
-	/*else
-	{
-		for (UINT i = 0; i < Num_Rows; i++)
-		{
-			for (UINT j = 0; j <Num_Cols; j++)
-			{
-				float x = Tile_Width * j;
-				float y = Tile_Height * i;
-				sprites->Get(tilemap[i][j] + Id)->DrawHUD(x, y);
-			}
-		}
-	}*/
 
 }
 

@@ -305,12 +305,14 @@ void CMario::OnCollisionWithSpecialPipe(LPCOLLISIONEVENT e)
 		startY = y + MARIO_BIG_BBOX_HEIGHT;
 		pipeX = pipe->x;
 		allowedEnterToHiddenMap = true;
+		isFlying = false;
 	}
 	else if (pipe->PipeType == SPECIAL_PIPE_HIDDEN_MAP_PIPE && e->ny > 0) 
 	{
 		startY = pipe->y;
 		allowedEnterToHiddenMap = true;
 		pipeX = pipe->x;
+		isFlying = false;
 	}
 }
 
@@ -1126,7 +1128,7 @@ void CMario::HandleMarioIsFlying(DWORD dt)
 {
 	if (isFlying)
 	{
-		if (GetTickCount64() - FlyingTime >= 3000)
+		if (GetTickCount64() - FlyingTime >= 2000)
 		{
 			isFlying = false;
 			if (!isOnPlatform)
